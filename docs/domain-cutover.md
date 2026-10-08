@@ -11,7 +11,7 @@ silently overwrite mail or an existing production origin.
 | Domain | Registrar state | Intended origin | Ready for traffic? |
 |---|---|---|---|
 | `domenicomassafra.it` | `inactive / dnsHold` | GitHub Pages, repo `domenicomassafra/DomenicoMassafra.it` | Hosting ready; DNS not delegated |
-| `strumentini.it` | `inactive / dnsHold` | Existing Cloudflare Worker `strumentiutili-it` | Source route prepared; production cutover blocked |
+| `strumentini.it` | delegated to Cloudflare | Cloudflare Worker `strumentini` + D1 `strumentini-auth` | Live and rollback-certified |
 | `dichiarazionipubbliche.it` | `inactive / dnsHold` | Existing MiniPC service behind a future public Cloudflare ingress | No public ingress yet |
 
 All three domains were registered at Dynadot on 2026-10-06 and currently return no
@@ -59,8 +59,8 @@ Do not add MX/TXT mail records unless an email provider is intentionally configu
 
 ## 3. strumentini.it
 
-The existing application already declares this Cloudflare Worker custom domain in
-`../StrumentiUtili.it/wrangler.jsonc`:
+The existing application declares this Cloudflare Worker custom domain in
+`../Strumentini.it/wrangler.jsonc`:
 
 ```json
 {
@@ -69,20 +69,11 @@ The existing application already declares this Cloudflare Worker custom domain i
 }
 ```
 
-The current checkout of `StrumentiUtili.it` is not a safe deployment source because it
-contains a very large uncommitted WIP. Do **not** run `wrangler deploy` from that checkout.
-
-After the Cloudflare zone is active:
-
-1. create a clean, reviewed deployment checkout/worktree from the intended release commit;
-2. run the repository release gates there;
-3. deploy the existing Worker so the `custom_domain` attachment creates the apex route;
-4. configure `www.strumentini.it` as a proxied hostname plus a permanent redirect to the
-   same path on `https://strumentini.it`;
-5. preserve the legacy `strumentiutili.it` deployment until Strumentini smoke tests pass.
-
-The Worker name and D1 database remain `strumentiutili-it` and `strumentiutili-auth`; they
-are infrastructure identifiers and are not renamed by the public-domain cutover.
+The current checkout is `/Users/domenico/Code/Strumentini.it`. Production is already
+active on the apex custom domain; `www.strumentini.it` redirects permanently to the
+equivalent apex path. Worker `strumentini` binds `AUTH_DB` to `strumentini-auth`.
+The current release has completed live browser smoke plus a real Worker rollback/restore
+exercise, and the superseded pre-rebrand D1 resource has been retired.
 
 ## 4. dichiarazionipubbliche.it
 
