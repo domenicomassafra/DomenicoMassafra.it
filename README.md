@@ -15,12 +15,12 @@ Sito personale di Domenico Massafra.
 Non ci sono dipendenze da installare. Per una preview locale:
 
 ```bash
-python3 -m http.server 8080
+python3 -m http.server 8080 --directory site
 ```
 
 Poi apri `http://localhost:8080`.
 
 ## Deploy
 
-Il workflow `.github/workflows/pages.yml` pubblica il contenuto della root del repository su GitHub Pages.
+Il workflow `.github/workflows/pages.yml` pubblica esclusivamente i file pubblici nella directory `site/` su GitHub Pages.
 Il dominio personalizzato viene configurato sul repository tramite GitHub Pages e il DNS viene gestito separatamente su Cloudflare.
