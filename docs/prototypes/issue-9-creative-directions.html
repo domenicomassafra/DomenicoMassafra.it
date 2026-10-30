@@ -18,7 +18,7 @@
     .prototype-note{position:relative;z-index:2;padding:10px 24px;background:#26262b;color:#fff;font-size:13px;text-align:center}
     .prototype-note strong{color:#fff093}
     .prototype-note a{color:#fff;white-space:nowrap}
-    .variant{min-height:100vh;padding-bottom:110px}
+    .variant{min-height:100vh;padding-bottom:35px}
     .nav{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:25px clamp(22px,5vw,90px)}
     .nav strong{font-size:clamp(16px,1.5vw,22px);letter-spacing:-.04em}
     .nav a{text-underline-offset:5px}
@@ -92,23 +92,26 @@
     .c .proof{border-top:3px solid #101112}
     .c .proof summary:hover{background:#101112;color:#d7ff52}
 
-    .switcher{position:fixed;z-index:10;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:999px;background:#fefefe;color:#161616;border:2px solid #161616;box-shadow:0 6px 28px #0005;font:700 13px Arial,sans-serif;max-width:calc(100vw - 20px)}
+    .switcher{position:relative;display:flex;align-items:center;gap:12px;width:max-content;margin:20px auto 30px;padding:10px 14px;border-radius:999px;background:#fefefe;color:#161616;border:2px solid #161616;box-shadow:0 6px 28px #0005;font:700 13px Arial,sans-serif;max-width:calc(100vw - 20px)}
     .switcher button{width:44px;height:44px;border:2px solid #161616;border-radius:50%;background:#fff;color:#111;font-size:24px;line-height:1}
     .switcher output{min-width:165px;text-align:center}
     .switcher small{display:block;font-size:11px;font-weight:400}
     @media(max-width:780px){
+      .prototype-note{padding:7px 12px}
+      .prototype-details{display:none}
       .nav{padding:18px 22px}.nav a{font-size:14px}
       .a-hero,.b-hero,.c-hero-main{grid-template-columns:1fr}
-      .a-hero,.b-hero{padding:45px 22px 55px}
+      .a-hero,.b-hero{padding:24px 22px 40px}
       .c-hero{padding:30px 22px 60px}
       .a .photo-slot,.b .photo-slot,.c .photo-slot{height:auto;min-height:300px}
       .b .b-number{margin-bottom:28px}
       .b-photo{transform:none}
       .c-desk{transform:none;box-shadow:7px 7px 0 #fff}
       .a-stamp{right:0}
-      .a-hero{display:flex;flex-direction:column;align-items:stretch;gap:23px}
+      .a-hero{display:flex;flex-direction:column;align-items:stretch;gap:16px}
       .a-hero .a-photo{order:-1}
-      .a-hero .a-photo .photo-slot{height:190px;min-height:190px}
+      .a-hero .a-photo .photo-slot{height:140px;min-height:140px;padding:14px}
+      .a-hero .a-photo .photo-slot small,.a-hero .a-caption{display:none}
       .a-hero .a-stamp{top:-12px;padding:8px 10px;font-size:11px}
       .a-hero h1{font-size:clamp(43px,10vw,72px)}
       .a-hero .intro{font-size:17px}
@@ -120,7 +123,7 @@
   </style>
 </head>
 <body>
-  <div class="prototype-note"><strong>PROTOTIPO NON PUBBLICO · ISSUE #9</strong> — A scelta dall'owner. CTA e contenuti qui sono ipotesi reversibili; fotografia e indirizzo email da definire.</div>
+  <div class="prototype-note"><strong>PROTOTIPO NON PUBBLICO · ISSUE #9</strong><span class="prototype-details"> — A scelta dall'owner. CTA e contenuti qui sono ipotesi reversibili; fotografia e indirizzo email da definire.</span></div>
 
   <div class="variant a" data-key="a">
     <header class="nav"><strong>Domenico Massafra.</strong><a href="#a-contatto">Contatto privato</a></header>
