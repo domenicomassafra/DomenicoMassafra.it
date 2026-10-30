@@ -48,6 +48,24 @@ class PagesArtifactTest(unittest.TestCase):
             PUBLIC_FILES,
         )
 
+    def test_public_homepage_uses_approved_officina_direction(self):
+        site = artifact_directory()
+        html = (site / "index.html").read_text()
+        css = (site / "styles.css").read_text()
+        self.assertIn("Prima lo", html)
+        self.assertIn("Poi te lo racconto", html)
+        self.assertIn('id="laboratorio"', html)
+        self.assertIn('id="contatti"', html)
+        self.assertIn('class="verdict"', html)
+        self.assertIn("https://www.instagram.com/domenico.massafraa/", html)
+        self.assertIn("https://strumentini.it/", html)
+        self.assertIn("https://dichiarazionipubbliche.it/", html)
+        self.assertIn("prefers-reduced-motion", css)
+        self.assertIn("--red:#ff725f", css)
+        self.assertNotIn("Capire abbastanza.", html)
+        self.assertNotIn("PROTOTIPO NON PUBBLICO", html)
+        self.assertNotIn("mailto:", html)
+
     def test_public_routes_and_private_repository_paths(self):
         site = artifact_directory()
         handler = functools.partial(QuietHandler, directory=str(site))
