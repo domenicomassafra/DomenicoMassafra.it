@@ -48,6 +48,11 @@
     .a h1{font-family:Georgia,serif;font-size:clamp(58px,7.7vw,132px);font-weight:700}
     .a h1 em{font-style:normal;color:#ff725f}
     .a .action{background:#ff725f;color:#101113;border-color:#ff725f}
+    .a-actions{display:flex;flex-wrap:wrap;align-items:center;gap:13px;margin-top:24px}
+    .a .action-secondary{background:transparent;color:#f5f0e8;border-color:#f5f0e8}
+    .a-contact{max-width:1030px;margin:0 auto;padding:32px clamp(22px,5vw,90px) 60px;border-top:1px solid #666}
+    .a-contact h2{font:700 clamp(28px,3vw,42px)/1.1 Georgia,serif;letter-spacing:-.04em}
+    .a-contact p{max-width:630px}
     .a-photo{position:relative}
     .a .photo-slot{height:min(60vw,590px);background:linear-gradient(165deg,#393c40,#161719);color:#f5f0e8}
     .a-stamp{position:absolute;top:-24px;right:-18px;padding:12px 16px;background:#ff725f;color:#111;transform:rotate(7deg);font-weight:900}
@@ -101,6 +106,12 @@
       .b-photo{transform:none}
       .c-desk{transform:none;box-shadow:7px 7px 0 #fff}
       .a-stamp{right:0}
+      .a-hero{display:flex;flex-direction:column;align-items:stretch;gap:23px}
+      .a-hero .a-photo{order:-1}
+      .a-hero .a-photo .photo-slot{height:190px;min-height:190px}
+      .a-hero .a-stamp{top:-12px;padding:8px 10px;font-size:11px}
+      .a-hero h1{font-size:clamp(43px,10vw,72px)}
+      .a-hero .intro{font-size:17px}
       .proof{padding:40px 22px}
       .switcher output{min-width:124px}
     }
@@ -109,16 +120,17 @@
   </style>
 </head>
 <body>
-  <div class="prototype-note"><strong>PROTOTIPO NON PUBBLICO · ISSUE #9</strong> — Tre direzioni da confrontare. Testi e blocchi foto provvisori; nessuna pubblicazione o scelta di brand implicita.</div>
+  <div class="prototype-note"><strong>PROTOTIPO NON PUBBLICO · ISSUE #9</strong> — A scelta dall'owner. CTA e contenuti qui sono ipotesi reversibili; fotografia e contatto da definire.</div>
 
   <div class="variant a" data-key="a">
-    <header class="nav"><strong>Domenico Massafra.</strong><a href="#a-prova">Come lavoro</a></header>
+    <header class="nav"><strong>Domenico Massafra.</strong><a href="#a-contatto">Contatto privato</a></header>
     <main>
       <section class="a-hero" aria-labelledby="a-title">
-        <div><p class="kicker">01 / Officina ribelle</p><h1 id="a-title">Metto alla <em>prova</em> le idee.</h1><p class="intro">Sono Domenico. Faccio lavorare gli agenti AI su problemi veri. Ti mostro cosa funziona, anche quando qualcosa va storto.</p><a class="action" href="#a-prova">Scopri il metodo</a></div>
+        <div><p class="kicker">01 / Officina ribelle · direzione scelta</p><h1 id="a-title">Metto alla <em>prova</em> le idee.</h1><p class="intro">Sono Domenico. Faccio lavorare gli agenti AI su problemi veri. Ti mostro cosa funziona, anche quando qualcosa va storto.</p><div class="a-actions"><a class="action" href="#a-prova">Esplora esperimenti e progetti</a><a class="action action-secondary" href="#a-contatto">Contatto privato</a></div></div>
         <div class="a-photo"><div class="photo-slot"><span>Qui andrà una fotografia reale di Domenico.<small>Asset e ritaglio mobile ancora da scegliere: nessun volto sintetico.</small></span></div><div class="a-stamp">VERIFICO. POI RACCONTO.</div><p class="a-caption">Una stanza di esperimenti: copy, volto e una prova verificabile, senza maschere da software house.</p></div>
       </section>
-      <section class="proof" id="a-prova"><p class="kicker">Il laboratorio</p><h2>Il risultato conta. Anche il limite.</h2><details><summary>Apri un esempio di come verrà mostrata una prova</summary><p><strong>Esempio di interazione, non un esperimento pubblicato.</strong> Qui compariranno input, output, controllo e limite di una prova reale, soltanto dopo verifica editoriale.</p></details><div class="proof-links"><a href="https://strumentini.it/">Strumentini.it</a><a href="https://dichiarazionipubbliche.it/">DichiarazioniPubbliche.it</a></div></section>
+      <section class="proof" id="a-prova"><p class="kicker">Esperimenti e progetti</p><h2>Il risultato conta. Anche il limite.</h2><p>Questi sono due progetti reali in costruzione. Il racconto dei singoli esperimenti arriverà con fonti, risultati e limiti verificati.</p><details><summary>Apri un esempio di come verrà mostrata una prova</summary><p><strong>Esempio di interazione, non un esperimento pubblicato.</strong> Qui compariranno input, output, controllo e limite di una prova reale, soltanto dopo verifica editoriale.</p></details><div class="proof-links"><a href="https://strumentini.it/">Strumentini.it</a><a href="https://dichiarazionipubbliche.it/">DichiarazioniPubbliche.it</a></div></section>
+      <section class="a-contact" id="a-contatto"><p class="kicker">Parliamone</p><h2>Hai un problema concreto da raccontarmi?</h2><p>Qui è previsto un contatto privato. Il canale e le informazioni richieste saranno definiti prima di attivarlo: questo prototipo non raccoglie messaggi o dati personali.</p></section>
     </main>
   </div>
 
