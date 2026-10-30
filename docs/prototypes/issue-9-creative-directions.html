@@ -184,8 +184,8 @@
     }
     document.querySelector('#prev').addEventListener('click', () => choose(current-1));
     document.querySelector('#next').addEventListener('click', () => choose(current+1));
-    document.addEventListener('keydown', event => {
-      if (event.altKey || event.ctrlKey || event.metaKey || ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName) || document.activeElement.isContentEditable) return;
+    document.querySelector('.switcher').addEventListener('keydown', event => {
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
       if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); choose(current + (event.key === 'ArrowRight' ? 1 : -1)); }
     });
     const initial = new URLSearchParams(location.search).get('variant');
