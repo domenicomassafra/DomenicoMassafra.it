@@ -179,6 +179,7 @@
       label.append(small);
       const url = new URL(location.href);
       url.searchParams.set('variant', key);
+      if (url.hash && !url.hash.startsWith(`#${key}-`)) url.hash = '';
       history.replaceState(null, '', url);
       window.scrollTo({top: 0, behavior: 'instant'});
     }
