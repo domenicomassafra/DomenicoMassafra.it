@@ -26,10 +26,9 @@ for domain in "${domains[@]}"; do
   dig +short MX "$domain" | sed 's/^/  /' || true
 
   printf 'HTTPS:\n'
-  if curl -fsSIL --max-time 8 "https://$domain/" >/tmp/domain-status-headers.$$ 2>/dev/null; then
-    sed -n '1p' /tmp/domain-status-headers.$$ | sed 's/^/  /'
+  if http_status="$(curl -sSIL --max-time 8 -o /dev/null -w '%{http_code}' "https://$domain/" 2>/dev/null)"; then
+    printf '  HTTP %s\n' "$http_status"
   else
     printf '  unavailable\n'
   fi
-  rm -f /tmp/domain-status-headers.$$
 done
