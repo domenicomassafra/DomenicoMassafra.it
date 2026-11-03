@@ -122,9 +122,9 @@ An HTTP `403` proves an HTTP server responded; it is **not** evidence of DNS
 failure. Inspect `Server`, `Location` and any Cloudflare response headers,
 compare `GET` with `HEAD` and check the browser before attributing a refusal to
 an edge access policy, application authorization or origin. A failed DNS lookup
-has no HTTP response. `curl -f` treats an HTTP `403` as a command failure, and
-`domain-status.sh` currently reports that situation as `unavailable`; use the
-raw HTTP status above when investigating access denials.
+has no HTTP response. `domain-status.sh` uses curl's native HTTP status output:
+it reports `HTTP 403` for an HTTP denial, while `unavailable` means curl failed
+at the transport level.
 
 For `domenicomassafra.it`, the final gate is:
 

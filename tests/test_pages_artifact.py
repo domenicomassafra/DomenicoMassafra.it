@@ -25,7 +25,7 @@ PUBLIC_FILES = {
 def artifact_directory():
     workflow = (ROOT / ".github/workflows/pages.yml").read_text()
     match = re.search(
-        r"uses:\s*actions/upload-pages-artifact@v3\s*\n\s*with:\s*\n\s*path:\s*([^\s#]+)",
+        r"uses:\s*actions/upload-pages-artifact@v\d+\s*\n\s*with:\s*\n\s*path:\s*([^\s#]+)",
         workflow,
     )
     if match is None:
@@ -44,6 +44,8 @@ class QuietHandler(SimpleHTTPRequestHandler):
 class PagesArtifactTest(unittest.TestCase):
     def test_only_the_public_files_are_uploaded(self):
         site = artifact_directory()
+        workflow = (ROOT / ".github/workflows/pages.yml").read_text()
+        self.assertRegex(workflow, r"(?m)^\s*include-hidden-files:\s*true\s*$")
         self.assertEqual(
             {p.relative_to(site).as_posix() for p in site.rglob("*") if p.is_file()},
             PUBLIC_FILES,
