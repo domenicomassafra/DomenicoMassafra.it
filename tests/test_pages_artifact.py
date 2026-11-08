@@ -25,6 +25,29 @@ PUBLIC_FILES = {
 }
 
 
+def root_tokens(css):
+    match = re.search(r":root\{([^}]*)\}", css)
+    if match is None:
+        raise AssertionError("styles.css must declare its tokens in :root")
+    return dict(re.findall(r"(--[a-z-]+):(#[0-9a-f]{6})", match.group(1)))
+
+
+def relative_luminance(hex_colour):
+    def channel(value):
+        value = value / 255
+        return value / 12.92 if value <= 0.03928 else ((value + 0.055) / 1.055) ** 2.4
+
+    red, green, blue = (int(hex_colour[i : i + 2], 16) for i in (1, 3, 5))
+    return 0.2126 * channel(red) + 0.7152 * channel(green) + 0.0722 * channel(blue)
+
+
+def contrast_ratio(foreground, background):
+    light, dark = sorted(
+        (relative_luminance(foreground), relative_luminance(background)), reverse=True
+    )
+    return (light + 0.05) / (dark + 0.05)
+
+
 def artifact_directory():
     workflow = (ROOT / ".github/workflows/pages.yml").read_text()
     match = re.search(
@@ -70,7 +93,8 @@ class PagesArtifactTest(unittest.TestCase):
         self.assertIn("https://strumentini.it/", html)
         self.assertIn("https://dichiarazionipubbliche.it/", html)
         self.assertIn("prefers-reduced-motion", css)
-        self.assertIn("--signal:#a72f21", css)
+        self.assertIn("color-scheme:dark", css)
+        self.assertIn('name="theme-color" content="#0b0d0e"', html)
         self.assertNotIn("L'officina di Domenico", html)
         self.assertNotIn("PROTOTIPO NON PUBBLICO", html)
         self.assertNotIn("mailto:", html)
@@ -112,6 +136,32 @@ class PagesArtifactTest(unittest.TestCase):
         self.assertNotIn("instagram.com/direct/", html)
         self.assertNotIn("ig.me/", html)
         self.assertNotRegex(html, r"<form\b")
+
+    def test_dark_theme_keeps_wcag_aa_contrast(self):
+        site = artifact_directory()
+        tokens = root_tokens((site / "styles.css").read_text())
+        # Body text 4.5:1, large text 3:1; borders are decoration and are not asserted.
+        for foreground, background, minimum in (
+            ("--ink", "--paper", 4.5),
+            ("--ink-soft", "--paper", 4.5),
+            ("--ink-soft", "--sheet", 4.5),
+            ("--ink-soft", "--surface", 4.5),
+            ("--signal", "--paper", 4.5),
+            ("--signal", "--sheet", 4.5),
+            ("--signal", "--surface", 4.5),
+            ("--ink", "--footer", 4.5),
+            ("--ink-on-light", "--cream", 4.5),
+            ("--signal-on-light", "--cream", 4.5),
+            ("--cream", "--ember", 4.5),
+            ("--ink-on-light", "--ink", 4.5),
+        ):
+            with self.subTest(foreground=foreground, background=background):
+                ratio = contrast_ratio(tokens[foreground], tokens[background])
+                self.assertGreaterEqual(round(ratio, 2), minimum)
+
+        # The page ground must stay a real dark theme, not a light one.
+        self.assertLess(relative_luminance(tokens["--paper"]), 0.02)
+        self.assertGreater(relative_luminance(tokens["--ink"]), 0.7)
 
     def test_public_routes_and_private_repository_paths(self):
         site = artifact_directory()
