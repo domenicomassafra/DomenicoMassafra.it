@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>PROTOTIPO NON APPROVATO #9 — tre direzioni, 11 novembre 2026</title>
+  <!-- Three disposable design directions; identical claim, portrait, destination and projects. ?variant=a|b|c -->
+  <noscript><style>.concept.a{display:block!important}.switcher{display:none!important}</style></noscript>
+  <style>
+    *,*::before,*::after{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:'Avenir Next','Helvetica Neue',sans-serif}
+    h1,h2,h3,p{margin:0}
+    a{color:inherit}
+    button{font:inherit;cursor:pointer}
+    :focus-visible{outline:3px solid #3589ff;outline-offset:4px}
+    .concept{display:none;min-height:100vh;overflow:hidden}
+    .concept.active{display:block}
+    .disclaimer{font:700 11px/1.5 'Avenir Next',sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:9px 30px;background:#202327;color:#fff;text-align:center}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .nav .name{font-weight:900;letter-spacing:-.045em;text-decoration:none}
+    .nav .nav-links{display:flex;gap:28px;align-items:center;font-size:13px;font-weight:700}
+    .nav-links a{text-underline-offset:5px}
+    h1{letter-spacing:-.065em;line-height:1.02}
+    .intro{font-size:19px;line-height:1.55;max-width:590px}
+    .actions{display:flex;gap:15px;align-items:center;flex-wrap:wrap;margin-top:30px}
+    .cta{display:inline-flex;align-items:center;justify-content:center;padding:15px 22px;min-height:52px;font-weight:800;font-size:14px;text-decoration:none}
+    .secondary{font-weight:700;font-size:14px;text-underline-offset:6px}
+    .caption{font-size:12px;line-height:1.55}
+    .photo{display:block;width:150px;height:150px;object-fit:cover}
+    .workbar{margin-top:65px;padding:26px 0;border-top:1px solid currentColor;display:flex;justify-content:space-between;gap:20px;align-items:center}
+    .workbar a{font-weight:700;font-size:14px;text-underline-offset:5px}
+    .switcher{position:fixed;z-index:9;bottom:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;background:#fff;color:#151515;padding:7px 9px;border:1px solid #555;border-radius:40px;box-shadow:0 10px 35px #0005;white-space:nowrap;font:700 12px 'Avenir Next',sans-serif}
+    .switcher button{border:0;border-radius:50%;width:33px;height:33px;background:#171717;color:#fff;font-size:18px}
+    .switcher output{min-width:174px;text-align:center}
+    .switcher small{display:block;font-weight:400;font-size:10px;color:#666;margin-top:2px}
+
+    /* A — Cinema poster / lively workshop: type and one small factual portrait. */
+    .a{background:#0d1114;color:#f5f0e8}
+    .a .nav{padding:26px 6vw;border-bottom:1px solid #3e4648}
+    .a .name{font-size:24px}
+    .a .nav-links a:last-child{color:#ff9b65}
+    .a-hero{min-height:650px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.85fr);gap:45px;padding:75px 6vw 45px;align-items:center}
+    .a h1{font-family:Impact,sans-serif;font-stretch:condensed;text-transform:uppercase;font-size:clamp(62px,7.4vw,120px);max-width:850px;letter-spacing:-.035em;line-height:.99}
+    .a h1 em{color:#ff9b65;font-style:normal}
+    .a .intro{margin-top:30px;color:#d7d6d1}
+    .a .cta{background:#ff9b65;color:#13181b;border:2px solid #ff9b65}
+    .a-stage{position:relative;min-height:510px;border-radius:46% 46% 4px 4px;border:2px solid #ff9b65;padding:16px;background:radial-gradient(circle at 50% 42%,#3e4647 0 23%,transparent 23.2%),#1c2426;display:flex;flex-direction:column;justify-content:center;align-items:center}
+    .a-stage::before{content:'01 / PERSONA REALE';font-size:11px;letter-spacing:.2em;font-weight:900;position:absolute;top:32px;left:34px}
+    .a-stage img{border:8px solid #f5f0e8;border-radius:50%;box-shadow:0 15px 50px #000b}
+    .a-stage strong{font:800 clamp(35px,4vw,70px)/.9 Impact,sans-serif;text-align:center;text-transform:uppercase;letter-spacing:-.02em;margin-top:27px;transform:rotate(-5deg)}
+    .a-stage strong span{color:#ff9b65}
+    .a-stage .caption{position:absolute;bottom:27px;left:32px;right:32px;color:#d7d6d1}
+    .a-bottom{padding:0 6vw 80px}
+    .a-bottom .workbar{border-color:#3e4648;color:#ccc}
+
+    /* B — Letter from a person: quiet editorial paper, high clarity. */
+    .b{background:#f3ebdd;color:#241c18;font-family:Georgia,'Times New Roman',serif}
+    .b .nav{padding:24px 6vw;border-bottom:1px solid #a89c8e}
+    .b .name{font-size:23px;letter-spacing:-.035em}
+    .b .nav-links{font-family:'Avenir Next',sans-serif}
+    .b-hero{padding:55px 6vw 10px;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:60px;min-height:610px}
+    .b h1{font-size:clamp(62px,6.1vw,101px);line-height:1.02;letter-spacing:-.045em;font-weight:400;max-width:950px}
+    .b h1 em{color:#1749c9;font-style:italic}
+    .b .intro{margin:37px 0 0;padding-top:20px;border-top:2px solid #241c18}
+    .b .actions{font-family:'Avenir Next',sans-serif}
+    .b .cta{background:#1749c9;color:#fff;border:2px solid #1749c9}
+    .b-note{position:relative;border-left:1px solid #a89c8e;padding:60px 0 0 38px;align-self:stretch}
+    .b-note img{border-radius:2px;filter:grayscale(.2);box-shadow:10px 12px 0 #d6c7b5}
+    .b-note .index{display:block;color:#1749c9;font:800 12px 'Avenir Next',sans-serif;letter-spacing:.13em;margin:24px 0 14px}
+    .b-note blockquote{margin:0;font-size:24px;line-height:1.23;font-style:italic}
+    .b-note .caption{font-family:'Avenir Next',sans-serif;margin-top:22px}
+    .b-bottom{padding:0 6vw 70px;font-family:'Avenir Next',sans-serif}
+    .b-bottom .workbar{border-color:#b5a99c}
+
+    /* C — Field notes: proof-first modular interface rather than a software dashboard. */
+    .c{background:#112124;color:#f1f4ea;font-family:'Avenir Next','Helvetica Neue',sans-serif}
+    .c .nav{padding:22px 5vw;border-bottom:1px solid #39565a}
+    .c .name{font-size:22px}
+    .c-hero{display:grid;grid-template-columns:minmax(0,.95fr) minmax(400px,1.05fr);gap:36px;padding:62px 5vw 20px;min-height:620px}
+    .c-copy{padding-top:26px}
+    .c h1{font-size:clamp(57px,6vw,91px);letter-spacing:-.045em;max-width:640px}
+    .c h1 em{font-style:normal;color:#c4ec7b}
+    .c .intro{color:#d6e2d8;margin-top:32px}
+    .c .cta{color:#112124;background:#c4ec7b;border:2px solid #c4ec7b}
+    .c-board{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);grid-template-rows:1fr 142px;gap:11px;align-self:stretch}
+    .c-board .tile{border:1px solid #547074;background:#1c3438;padding:22px}
+    .c-board .person{background:#e6e6d4;color:#173134;display:flex;flex-direction:column;justify-content:space-between}
+    .c-board .person img{border-radius:50%;border:6px solid #fff;align-self:center}
+    .c-board .person b{font-size:16px;letter-spacing:-.035em}
+    .c-board .person .caption{color:#38514e}
+    .c-board .test{display:flex;flex-direction:column;justify-content:space-between}
+    .c-board .tile-label{font-size:11px;font-weight:900;letter-spacing:.11em;text-transform:uppercase;color:#c4ec7b}
+    .c-board .test strong{font-size:38px;line-height:1.05;letter-spacing:-.04em}
+    .c-board .test p{font-size:14px;line-height:1.5;color:#d6e2d8}
+    .c-board .work1,.c-board .work2{display:flex;flex-direction:column;justify-content:space-between;text-decoration:none}
+    .c-board .work1{background:#c4ec7b;color:#13291f}
+    .c-board .work2{background:#405e65}
+    .c-board .work1 span,.c-board .work2 span{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+    .c-board .work1 strong,.c-board .work2 strong{font-size:24px;letter-spacing:-.04em;overflow-wrap:anywhere}
+    .c-bottom{padding:0 5vw 60px}
+    .c-bottom .workbar{border-color:#547074}
+
+    @media(max-width:900px){
+      .a-hero,.b-hero,.c-hero{grid-template-columns:1fr;gap:35px;min-height:0}
+      .a-stage{min-height:420px}
+      .b-note{display:grid;grid-template-columns:160px 1fr;gap:0 26px;padding:20px 0 10px;border-left:0;border-top:1px solid #a89c8e}
+      .b-note .index{margin-top:0}
+      .b-note img{grid-row:1/4}
+      .c-board{height:440px}
+    }
+    @media(max-width:540px){
+      .disclaimer{font-size:9px;padding:7px 10px}
+      .nav{flex-wrap:wrap;gap:8px}
+      .nav .name{font-size:18px}
+      .nav .nav-links{gap:15px;font-size:11px}
+      .a .nav,.b .nav,.c .nav{padding:18px 20px}
+      .a-hero,.b-hero,.c-hero{padding:46px 20px 15px;gap:38px}
+      .a h1{font-size:clamp(49px,12vw,72px)}
+      .b h1{font-size:clamp(50px,11.8vw,66px)}
+      .c h1{font-size:clamp(49px,11.2vw,68px)}
+      .intro{font-size:17px;margin-top:22px!important}
+      .actions{margin-top:24px}
+      .cta{width:100%;padding:15px 10px}
+      .a-stage{min-height:355px;border-radius:44% 44% 4px 4px}
+      .a-stage strong{font-size:44px}
+      .a-stage::before{left:22px;top:20px}
+      .a-stage .caption{left:20px;right:20px;bottom:18px}
+      .b-note{display:block;padding-top:25px}
+      .b-note img{float:right;margin:0 0 15px 20px;width:125px;height:125px}
+      .b-note blockquote{font-size:23px}
+      .b-note .index{padding-top:8px}
+      .b-bottom,.a-bottom,.c-bottom{padding:0 20px 80px}
+      .c-copy{padding-top:0}
+      .c-board{grid-template-columns:1fr 1fr;grid-template-rows:255px 120px;height:auto;gap:8px}
+      .c-board .tile{padding:13px}
+      .c-board .person img{width:110px;height:110px}
+      .c-board .person b{font-size:14px}
+      .c-board .test strong{font-size:27px}
+      .c-board .test p{font-size:12px}
+      .c-board .work1 strong,.c-board .work2 strong{font-size:18px}
+      .workbar{flex-wrap:wrap;margin-top:35px;gap:10px}
+      .switcher{bottom:8px}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <div class="disclaimer">Prototipo di confronto • non approvato • non è il sito pubblico</div>
+  <main>
+    <section class="concept a" id="variant-a" aria-label="Direzione A: Officina cinetica">
+      <header class="nav"><a class="name" href="#variant-a">Domenico Massafra.</a><nav class="nav-links" aria-label="Navigazione A"><a href="#a-esperimenti">Esperimenti</a><a href="https://www.instagram.com/domenico.massafraa/">Contatti ↗</a></nav></header>
+      <div class="a-hero"><div><h1>Provo l'AI <em>sul serio.</em><br>Poi te la spiego semplice.</h1><p class="intro">Sono Domenico. Uso agenti e strumenti AI per affrontare problemi pratici, e racconto anche quello che non funziona.</p><div class="actions"><a class="cta" href="https://www.instagram.com/domenico.massafraa/">Raccontami un problema ↗</a><a class="secondary" href="#a-esperimenti">Guarda gli esperimenti ↓</a></div></div><div class="a-stage"><img class="photo" src="../../site/ritratto-instagram.jpg" alt="Foto reale di Domenico dal profilo Instagram"><strong>Provo.<br><span>Controllo.</span><br>Racconto.</strong><p class="caption">Una foto autentica. Per una hero fotografica grande serve lo scatto originale.</p></div></div>
+      <div class="a-bottom" id="a-esperimenti"><div class="workbar"><strong>ESPERIMENTI APERTI, DA ESPLORARE</strong><a href="https://strumentini.it/">Strumentini.it ↗</a><a href="https://dichiarazionipubbliche.it/">DichiarazioniPubbliche.it ↗</a></div></div>
+    </section>
+    <section class="concept b" id="variant-b" aria-label="Direzione B: Lettera dal laboratorio">
+      <header class="nav"><a class="name" href="#variant-b">Domenico Massafra</a><nav class="nav-links" aria-label="Navigazione B"><a href="#b-esperimenti">Esperimenti</a><a href="https://www.instagram.com/domenico.massafraa/">Contatti ↗</a></nav></header>
+      <div class="b-hero"><div><h1>Provo l'AI <em>sul serio.</em><br>Poi te la spiego semplice.</h1><p class="intro">Sono Domenico. Uso agenti e strumenti AI per affrontare problemi pratici, e racconto anche quello che non funziona.</p><div class="actions"><a class="cta" href="https://www.instagram.com/domenico.massafraa/">Raccontami un problema ↗</a><a class="secondary" href="#b-esperimenti">Guarda gli esperimenti ↓</a></div></div><aside class="b-note"><img class="photo" src="../../site/ritratto-instagram.jpg" alt="Foto reale di Domenico dal profilo Instagram"><span class="index">UNA PERSONA, DEI TENTATIVI</span><blockquote>«Le cose interessanti iniziano quando le provi.»</blockquote><p class="caption">Foto del profilo a 150 px. Ritratto editoriale grande subordinato a uno scatto autentico migliore.</p></aside></div>
+      <div class="b-bottom" id="b-esperimenti"><div class="workbar"><strong>Due progetti da aprire oggi</strong><a href="https://strumentini.it/">Strumentini.it ↗</a><a href="https://dichiarazionipubbliche.it/">DichiarazioniPubbliche.it ↗</a></div></div>
+    </section>
+    <section class="concept c" id="variant-c" aria-label="Direzione C: Tavolo delle prove">
+      <header class="nav"><a class="name" href="#variant-c">DOMENICO MASSAFRA <span aria-hidden="true">✳</span></a><nav class="nav-links" aria-label="Navigazione C"><a href="#c-esperimenti">Esperimenti</a><a href="https://www.instagram.com/domenico.massafraa/">Contatti ↗</a></nav></header>
+      <div class="c-hero"><div class="c-copy"><h1>Provo l'AI <em>sul serio.</em><br>Poi te la spiego semplice.</h1><p class="intro">Sono Domenico. Uso agenti e strumenti AI per affrontare problemi pratici, e racconto anche quello che non funziona.</p><div class="actions"><a class="cta" href="https://www.instagram.com/domenico.massafraa/">Raccontami un problema ↗</a><a class="secondary" href="#c-esperimenti">Guarda gli esperimenti ↓</a></div></div><div class="c-board"><div class="tile person"><span class="tile-label" style="color:#173134">01 / CHI SONO</span><img class="photo" src="../../site/ritratto-instagram.jpg" alt="Foto reale di Domenico dal profilo Instagram"><b>Domenico, in carne e ossa.</b><span class="caption">Foto attuale 150×150 px</span></div><div class="tile test"><span class="tile-label">02 / COME RAGIONO</span><strong>Funziona?</strong><p>Prima lo provo. Poi controllo dove si rompe.</p><span class="tile-label">PROVA → LIMITE → RACCONTO</span></div><a class="tile work1" href="https://strumentini.it/"><span>03 / PROGETTO</span><strong>Strumentini ↗</strong></a><a class="tile work2" href="https://dichiarazionipubbliche.it/"><span>04 / PROGETTO</span><strong>Dichiarazioni Pubbliche ↗</strong></a></div></div>
+      <div class="c-bottom" id="c-esperimenti"><div class="workbar"><strong>Esperimenti reali, lavoro in corso</strong><a href="https://github.com/domenicomassafra">Codice e progetti su GitHub ↗</a></div></div>
+    </section>
+  </main>
+  <nav class="switcher" aria-label="Confronta le direzioni"><button id="previous" type="button" aria-label="Direzione precedente">←</button><output id="which" aria-live="polite">A · Officina cinetica<small>Concept non approvato</small></output><button id="next" type="button" aria-label="Direzione successiva">→</button></nav>
+  <script>
+    const variants=['a','b','c'];
+    const names={a:'Officina cinetica',b:'Lettera dal laboratorio',c:'Tavolo delle prove'};
+    function show(variant){const active=variants.includes(variant)?variant:'a';for(const key of variants){const node=document.getElementById('variant-'+key);node.classList.toggle('active',key===active);node.setAttribute('aria-hidden',String(key!==active));}document.getElementById('which').innerHTML=active.toUpperCase()+' · '+names[active]+'<small>Concept non approvato</small>';const next=new URL(location.href);next.searchParams.set('variant',active);history.replaceState(null,'',next);}
+    function cycle(step){const current=new URLSearchParams(location.search).get('variant');show(variants[(variants.indexOf(current)+step+3)%3]);}
+    document.getElementById('previous').addEventListener('click',()=>cycle(-1));
+    document.getElementById('next').addEventListener('click',()=>cycle(1));
+    document.addEventListener('keydown',event=>{if(event.target.closest('input,textarea,select,[contenteditable]'))return;if(event.key==='ArrowLeft')cycle(-1);if(event.key==='ArrowRight')cycle(1);});
+    show(new URLSearchParams(location.search).get('variant'));
+  </script>
+</body>
+</html>
