@@ -27,7 +27,7 @@ Visitatori in arrivo dal profilo Instagram o dai motori di ricerca, anche su tel
 - Sito statico HTML/CSS su GitHub Pages con HTTPS e dominio `domenicomassafra.it`. Pubblicazione automatica da `main` con workflow `.github/workflows/pages.yml`.
 - CTA primaria: contattare Domenico per affrontare problemi pratici usando l'AI. I link a Strumentini.it, DichiarazioniPubbliche.it e GitHub restano accessibili come prove/progetti reali, senza inventare clienti o lavori commissionati.
 - Interazioni comprensibili con mouse, touch e tastiera, fallback statico e supporto a `prefers-reduced-motion`. Niente marchi o mascotte di terzi senza verifica caso per caso.
-- Sono ancora da approvare: la nuova direzione visiva dopo la bocciatura del sito del 2 novembre, lo scatto originale ad alta risoluzione e il ritaglio definitivo, la prima guida/storia verificata, l'eventuale indirizzo email pubblico.
+- Direzione visiva «Officina cinetica» pubblicata il 14/11/2026 (vedi `DESIGN.md`). Restano aperti: uno scatto originale ad alta risoluzione, la prima guida/storia verificata, l'eventuale indirizzo email pubblico.
 
 ## Brand Commitments
 
