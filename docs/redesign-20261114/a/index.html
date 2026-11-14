@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Domenico Massafra</title>
+<meta name="description" content="Faccio lavorare gli agenti AI su problemi veri. Ti mostro cosa funziona, anche se non programmi.">
+<link rel="icon" href="../../../site/favicon.svg">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+:root{
+  --paper:#f5f0e8; --ink:#0b0b0d; --soft:#5c5751; --grid:#dfe3e6; --margin:#ff725f;
+  --red:#b72f1d;      /* red pen as text on paper: 5.6:1 */
+  --red-big:#d63f28;  /* Signal, display size only */
+  --line:#cfc8bd;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1.0625rem/1.55 "Archivo",Arial,sans-serif;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;}
+::selection{background:var(--margin);color:var(--ink)}
+a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:2px;text-decoration-color:var(--margin)}
+a:focus-visible,.btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:2px}
+.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:12px;background:var(--ink);color:var(--paper);padding:.5rem .8rem;z-index:9}
+.page{position:relative;max-width:1180px;margin:0 auto;padding:0 24px 0 64px}
+.page::before{content:"";position:absolute;top:0;bottom:0;left:40px;width:2px;background:var(--margin)}
+header{display:flex;justify-content:space-between;align-items:center;padding:22px 0;gap:16px;flex-wrap:wrap}
+.mark{font-weight:700;letter-spacing:-.01em;text-decoration:none}
+nav a{margin-left:20px;font-weight:600;text-decoration:none}
+nav a:hover{text-decoration:underline}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;align-items:end;padding:56px 0 72px}
+.myth{color:var(--soft);font-size:1.15rem;margin:0 0 18px;text-decoration:line-through 3px var(--red-big)}
+h1{font-weight:750;font-stretch:92%;font-size:clamp(2.4rem,6.2vw,5.2rem);line-height:.98;letter-spacing:-.03em;margin:0;max-width:13ch;text-wrap:balance}
+.u{position:relative;white-space:nowrap}
+.u svg{position:absolute;left:0;bottom:-.12em;width:100%;height:.22em;overflow:visible}
+.lead{font-size:clamp(1.2rem,2vw,1.5rem);line-height:1.35;margin:22px 0 0;max-width:30ch}
+.actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+.btn{display:inline-flex;align-items:center;min-height:48px;padding:0 22px;background:var(--ink);color:var(--paper);font-weight:650;text-decoration:none;border-radius:4px;transition:transform .15s ease-out,background .15s}
+.btn:hover{background:var(--red)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+figure{margin:0;position:relative;justify-self:end}
+figure img{display:block;width:150px;height:150px;border:6px solid #fff;box-shadow:0 6px 18px rgba(11,11,13,.18)}
+figcaption{position:absolute;left:-118px;top:44px;color:var(--red);font-weight:600;font-style:italic;font-size:1.05rem;width:110px;text-align:right}
+figcaption svg{display:block;margin:4px 0 0 auto}
+.intro{margin:14px 0 0;color:var(--soft);font-size:.98rem;max-width:30ch}
+section{padding:56px 0;border-top:1px solid var(--line)}
+h2{font-weight:700;font-size:clamp(1.6rem,3vw,2.3rem);letter-spacing:-.02em;line-height:1.05;margin:0 0 28px}
+.work{list-style:none;margin:0;padding:0}
+.work li{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:6px 18px;align-items:baseline;padding:22px 0;border-bottom:1px solid var(--line)}
+.work li:last-child{border-bottom:0}
+.work h3{margin:0;overflow-wrap:anywhere;font-size:clamp(1.4rem,2.6vw,2rem);letter-spacing:-.02em;font-weight:700}
+.work p{grid-column:2;margin:0;color:var(--soft);max-width:52ch}
+.work a.go{grid-column:3;grid-row:1;font-weight:650;white-space:nowrap}
+.work svg{grid-row:1}
+.quote{font-weight:700;font-size:clamp(1.7rem,4vw,3.2rem);line-height:1.08;letter-spacing:-.025em;max-width:22ch;margin:0}
+.quote .u svg{height:.2em}
+.contact p{margin:0 0 22px;max-width:44ch}
+.note{font-size:.88rem;color:var(--soft);margin-top:12px!important}
+footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:28px 0 40px;border-top:1px solid var(--line);font-size:.9rem;color:var(--soft)}
+@media (max-width:760px){
+  .page{padding:0 16px 0 36px}.page::before{left:20px}
+  .hero{grid-template-columns:1fr;gap:28px;padding:28px 0 48px}
+  figure{justify-self:start;order:-1;margin-left:0}
+  figcaption{left:172px;top:40px;text-align:left}
+  figcaption svg{transform:scaleX(-1);margin:4px 0 0}
+  nav a{margin:0 16px 0 0}
+  .work li{grid-template-columns:28px minmax(0,1fr)}
+  .work a.go{grid-column:2;grid-row:auto}
+  .btn{flex:1 1 100%;justify-content:center}
+}
+@media (max-width:360px){figcaption{left:166px;width:90px}}
+@media (prefers-reduced-motion:no-preference){
+  .draw path{stroke-dasharray:400;stroke-dashoffset:400;animation:draw .9s .35s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Vai al contenuto</a>
+<div class="page">
+<header>
+  <a class="mark" href="#">Domenico Massafra</a>
+  <nav aria-label="Principale"><a href="#progetti">Progetti</a><a href="#contatti">Contatti</a></nav>
+</header>
+<main id="main">
+  <div class="hero">
+    <div>
+      <p class="myth">«Basta un prompt e l'AI fa tutto da sola.»</p>
+      <h1>Faccio lavorare gli agenti AI su <span class="u">problemi veri.<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true" class="draw"><path d="M3 12 C70 4 160 17 297 7" stroke="#ff725f" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span></h1>
+      <p class="lead">Ti mostro cosa funziona, anche se non programmi.</p>
+      <div class="actions">
+        <a class="btn" href="https://www.instagram.com/domenico.massafraa/">Raccontami un problema</a>
+        <a class="btn ghost" href="#progetti">Guarda cosa ho costruito</a>
+      </div>
+    </div>
+    <figure>
+      <img src="../../../site/ritratto-instagram.jpg" width="150" height="150" alt="Domenico Massafra alla sua scrivania, con occhiali e luce rossa alle spalle">
+      <figcaption>sono io<svg width="60" height="18" viewBox="0 0 60 18" aria-hidden="true"><path d="M2 9 H54 M46 3 L55 9 L46 15" stroke="#b72f1d" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></figcaption>
+      <p class="intro">Ho studiato economia e marketing. Non sono uno sviluppatore.</p>
+    </figure>
+  </div>
+
+  <section id="progetti" aria-labelledby="h-prog">
+    <h2 id="h-prog">Cosa ho costruito con gli agenti</h2>
+    <ul class="work">
+      <li>
+        <svg width="26" height="22" viewBox="0 0 26 22" aria-hidden="true"><path d="M3 12 L10 19 L23 3" stroke="#d63f28" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3>Strumentini.it</h3>
+        <p>Strumenti gratuiti per piccoli lavori su PDF, immagini, CSV e testo.</p>
+        <a class="go" href="https://strumentini.it/">Apri Strumentini.it</a>
+      </li>
+      <li>
+        <svg width="26" height="22" viewBox="0 0 26 22" aria-hidden="true"><path d="M3 12 L10 19 L23 3" stroke="#d63f28" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3>DichiarazioniPubbliche.it</h3>
+        <p>Dichiarazioni pubbliche, ognuna con la sua fonte.</p>
+        <a class="go" href="https://dichiarazionipubbliche.it/">Apri il progetto</a>
+      </li>
+    </ul>
+    <p class="note">Il codice è su <a href="https://github.com/domenicomassafra">GitHub</a>.</p>
+  </section>
+
+  <section aria-label="Cosa penso">
+    <p class="quote">Non devi saper programmare. Devi capirne <span class="u">abbastanza.<svg viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 12 C70 5 160 16 297 8" stroke="#ff725f" stroke-width="6" fill="none" stroke-linecap="round"/></svg></span></p>
+  </section>
+
+  <section id="contatti" class="contact" aria-labelledby="h-con">
+    <h2 id="h-con">Raccontami il problema. Partiamo da lì.</h2>
+    <p>Un lavoro ripetitivo, un file da sistemare, un'idea da provare.</p>
+    <a class="btn" href="https://www.instagram.com/domenico.massafraa/">Scrivimi su Instagram</a>
+    <p class="note">Si apre il mio profilo: il pulsante «Messaggio» compare se hai un account.</p>
+  </section>
+</main>
+<footer><span>© 2026 Domenico Massafra</span><a href="https://github.com/domenicomassafra">GitHub</a></footer>
+</div>
+</body>
+</html>

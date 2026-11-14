@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Domenico Massafra</title>
+<meta name="description" content="Faccio lavorare gli agenti AI su problemi veri. Ti mostro cosa funziona, anche se non programmi.">
+<link rel="icon" href="../../../site/favicon.svg">
+<link rel="stylesheet" href="../fonts/fonts.css">
+<style>
+:root{--coral:#ff725f;--ink:#0b0b0d;--ink-soft:#3b1610;--paper:#f5f0e8;--dark-soft:#a39d94}
+*{box-sizing:border-box}
+body{margin:0;background:var(--coral);color:var(--ink);font:400 1.0625rem/1.55 "Archivo",Arial,sans-serif}
+::selection{background:var(--ink);color:var(--coral)}
+a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:2px}
+a:focus-visible{outline:3px solid currentColor;outline-offset:4px}
+.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:12px;background:var(--ink);color:var(--coral);padding:.5rem .8rem;z-index:9}
+.wrap{max-width:1320px;margin:0 auto;padding:0 32px}
+header{display:flex;justify-content:flex-end;gap:24px;padding:22px 0 0}
+header a{font-weight:650;text-decoration:none}
+header a:hover{text-decoration:underline}
+h1{margin:12px 0 0;font-weight:850;font-stretch:66%;text-transform:none;letter-spacing:-.02em;line-height:.84;font-size:clamp(3.6rem,15.2vw,13.5rem)}
+h1 span{display:block}
+.top{display:grid;grid-template-columns:auto minmax(0,1fr);gap:40px;align-items:start;padding:40px 0 80px}
+.top img{display:block;width:150px;height:150px;border:4px solid var(--ink)}
+.promise{margin:0;font-weight:750;font-size:clamp(1.6rem,3.4vw,2.9rem);line-height:1.04;letter-spacing:-.025em;max-width:20ch}
+.who{margin:18px 0 0;color:var(--ink-soft);max-width:44ch}
+.btn{display:inline-flex;align-items:center;min-height:52px;padding:0 26px;margin-top:28px;background:var(--ink);color:var(--coral);font-weight:700;text-decoration:none;transition:transform .15s ease-out}
+.btn:hover{transform:translateY(-2px)}.btn:active{transform:none}
+.dark{background:var(--ink);color:var(--paper)}
+.dark a:focus-visible{outline-color:var(--coral)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0;border-left:1px solid #2a2a2e}
+.grid2 a{display:block;padding:44px 36px 48px;border-right:1px solid #2a2a2e;text-decoration:none;min-height:280px;position:relative}
+.grid2 h2{font-size:clamp(1.6rem,3.2vw,2.8rem);font-weight:750;letter-spacing:-.03em;line-height:1;margin:0 0 14px;overflow-wrap:anywhere}
+.grid2 p{margin:0;color:var(--dark-soft);max-width:34ch}
+.grid2 b{display:inline-block;margin-top:28px;color:var(--coral);font-weight:700}
+.grid2 a:hover h2{color:var(--coral)}
+.label{padding:56px 0 24px;margin:0;font-size:1rem;color:var(--dark-soft)}
+.label a{color:var(--paper)}
+.belief{padding:88px 0}
+.belief p{margin:0;font-weight:850;font-stretch:70%;font-size:clamp(2.4rem,7vw,6rem);line-height:.9;letter-spacing:-.02em;max-width:14ch}
+.contact{padding:24px 0 80px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+.contact h2{font-size:clamp(1.6rem,3vw,2.4rem);letter-spacing:-.025em;line-height:1.05;margin:24px 0 0}
+.contact p{margin:0;color:var(--ink-soft)}
+.contact .note{font-size:.9rem;margin-top:12px}
+footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:24px 0 36px;font-size:.9rem}
+@media (max-width:780px){
+  .wrap{padding:0 16px}
+  header{justify-content:flex-start}
+  .top{grid-template-columns:1fr;gap:24px;padding:28px 0 56px}
+  .top img{width:112px;height:112px}
+  .btn{width:100%;justify-content:center}
+  .grid2{grid-template-columns:1fr;border-left:0}
+  .grid2 a{border-right:0;border-bottom:1px solid #2a2a2e;padding:36px 0;min-height:0}
+  .contact{grid-template-columns:1fr;gap:12px}
+  .belief{padding:60px 0}
+}
+@media (prefers-reduced-motion:no-preference){
+  h1 span{clip-path:inset(0 0 100% 0);animation:rise .8s cubic-bezier(.16,1,.3,1) forwards}
+  h1 span+span{animation-delay:.1s}
+  @keyframes rise{to{clip-path:inset(0 0 0 0)}}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Vai al contenuto</a>
+<div class="wrap">
+  <header><a href="#progetti">Progetti</a><a href="#contatti">Contatti</a></header>
+  <main id="main">
+    <h1><span>Domenico</span><span>Massafra</span></h1>
+    <div class="top">
+      <img src="../../../site/ritratto-instagram.jpg" width="150" height="150" alt="Domenico Massafra alla sua scrivania, con luce rossa alle spalle">
+      <div>
+        <p class="promise">Faccio lavorare gli agenti AI su problemi veri. Ti mostro cosa funziona, anche se non programmi.</p>
+        <p class="who">Ho studiato economia e marketing. Non sono uno sviluppatore.</p>
+        <a class="btn" href="https://www.instagram.com/domenico.massafraa/">Raccontami un problema</a>
+      </div>
+    </div>
+  </main>
+</div>
+<div class="dark" id="progetti">
+  <div class="wrap">
+    <p class="label">Costruiti con gli agenti. Il codice è su <a href="https://github.com/domenicomassafra">GitHub</a>.</p>
+    <div class="grid2">
+      <a href="https://strumentini.it/"><h2>Strumentini.it</h2><p>Strumenti gratuiti per piccoli lavori su PDF, immagini, CSV e testo.</p><b>Apri il sito</b></a>
+      <a href="https://dichiarazionipubbliche.it/"><h2>Dichiarazioni&shy;Pubbliche.it</h2><p>Dichiarazioni pubbliche, ognuna con la sua fonte.</p><b>Apri il sito</b></a>
+    </div>
+    <div class="belief"><p>Non devi saper programmare. Devi capirne abbastanza.</p></div>
+  </div>
+</div>
+<div class="wrap">
+  <section class="contact" id="contatti" aria-labelledby="h-c">
+    <div><h2 id="h-c">Raccontami il problema. Partiamo da lì.</h2></div>
+    <div>
+      <p>Un lavoro ripetitivo, un file da sistemare, un'idea da provare.</p>
+      <a class="btn" href="https://www.instagram.com/domenico.massafraa/">Scrivimi su Instagram</a>
+      <p class="note">Si apre il mio profilo: il pulsante «Messaggio» compare se hai un account.</p>
+    </div>
+  </section>
+  <footer><span>© 2026 Domenico Massafra</span><a href="https://github.com/domenicomassafra">GitHub</a></footer>
+</div>
+</body>
+</html>
