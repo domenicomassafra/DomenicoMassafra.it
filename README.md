@@ -6,7 +6,7 @@ Sito personale di Domenico Massafra.
 
 - home essenziale per il brand personale;
 - link canonici ai progetti [Strumentini.it](https://strumentini.it/) e [DichiarazioniPubbliche.it](https://dichiarazionipubbliche.it/);
-- sito statico, veloce e senza dipendenze runtime: l'unico script, `site/board.js` (palette del tabellone), è locale e facoltativo;
+- sito statico, veloce e senza dipendenze runtime: l'unico script, `site/app.js` (interfaccia chat costruita dalle conversazioni in `site/index.html`), è locale e facoltativo;
 - font Archivo e JetBrains Mono serviti dal sito in `site/fonts/` (licenza SIL OFL in `site/fonts/OFL.txt`), nessuna richiesta a servizi di terzi;
 - deploy automatico su GitHub Pages a ogni push su `main`;
 - dominio canonico `https://domenicomassafra.it/`.

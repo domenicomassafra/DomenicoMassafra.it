@@ -5,8 +5,6 @@ from html.parser import HTMLParser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import re
-import shutil
-import subprocess
 import threading
 from urllib.error import HTTPError
 from urllib.request import urlopen
@@ -15,8 +13,11 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 INSTAGRAM_PROFILE = "https://www.instagram.com/domenico.massafraa/"
-PROMISE = "Faccio lavorare gli agenti AI su problemi veri. Ti mostro cosa funziona, anche se non programmi."
+PROMISE = "Faccio lavorare gli agenti AI su problemi veri."
+LEDE = "Ti mostro cosa funziona, anche se non programmi."
 PAYOFF = "Non devi saper programmare. Devi capirne abbastanza."
+PORTRAIT_ALT = "Ritratto pubblicato sul profilo Instagram di Domenico Massafra"
+BADGES = {"Sì", "Dipende", "No"}
 # Owner brand canon (BRAND.md). Any other value is off-palette.
 CANON_TOKENS = {
     "--carbon": "#0b0b0d",
@@ -30,7 +31,8 @@ PUBLIC_FILES = {
     ".nojekyll",
     "index.html",
     "styles.css",
-    "board.js",
+    "app.js",
+    "icons.svg",
     "ritratto-instagram.jpg",
     "strumentini-mark.svg",
     "dichiarazioni-mark.svg",
@@ -51,45 +53,69 @@ def root_tokens(css):
     return dict(re.findall(r"(--[a-z-]+):(#[0-9a-f]{6})", match.group(1)))
 
 
-def visible_text(html):
-    html = re.sub(r"(?s)<(script|style)\b.*?</\1>", " ", html)
-    return " ".join(re.sub(r"<[^>]+>", " ", html).split())
+class Element:
+    def __init__(self, tag, attrs):
+        self.tag = tag
+        self.attrs = attrs
+        self.children = []  # Element or str
+
+    @property
+    def classes(self):
+        return (self.attrs.get("class") or "").split()
+
+    def find_all(self, tag=None, cls=None, attr=None):
+        found = []
+        for child in self.children:
+            if isinstance(child, Element):
+                if (tag is None or child.tag == tag) and (cls is None or cls in child.classes) and (attr is None or attr in child.attrs):
+                    found.append(child)
+                found += child.find_all(tag, cls, attr)
+        return found
+
+    def text(self):
+        parts = []
+        for child in self.children:
+            if isinstance(child, str):
+                parts.append(child)
+            elif child.tag not in ("script", "style"):
+                parts.append(child.text())
+        return " ".join(" ".join(parts).split())
 
 
-class FlapText(HTMLParser):
-    """Collect the source text inside every element marked data-flap."""
+class TreeBuilder(HTMLParser):
+    """Turn the page into a small element tree, so tests read structure instead of regexes."""
 
-    VOID = {"area", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
+    VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 
     def __init__(self):
         super().__init__()
-        self.stack = []  # one entry per open element: index into self.texts, or None
-        self.texts = []
+        self.root = Element("#document", {})
+        self.stack = [self.root]
 
     def handle_starttag(self, tag, attrs):
-        if tag in self.VOID:
-            return
-        if "data-flap" in dict(attrs):
-            self.texts.append("")
-            self.stack.append(len(self.texts) - 1)
-        else:
-            self.stack.append(None)
+        element = Element(tag, dict(attrs))
+        self.stack[-1].children.append(element)
+        if tag not in self.VOID:
+            self.stack.append(element)
+
+    def handle_startendtag(self, tag, attrs):
+        self.stack[-1].children.append(Element(tag, dict(attrs)))
 
     def handle_endtag(self, tag):
-        if tag not in self.VOID and self.stack:
-            self.stack.pop()
+        for index in range(len(self.stack) - 1, 0, -1):
+            if self.stack[index].tag == tag:
+                del self.stack[index:]
+                return
 
     def handle_data(self, data):
-        for index in self.stack:
-            if index is not None:
-                self.texts[index] += data
+        self.stack[-1].children.append(data)
 
 
-def flap_texts(html):
-    parser = FlapText()
-    parser.feed(html)
-    parser.close()
-    return [" ".join(text.split()) for text in parser.texts]
+def parse(html):
+    builder = TreeBuilder()
+    builder.feed(html)
+    builder.close()
+    return builder.root
 
 
 def relative_luminance(hex_colour):
@@ -128,206 +154,210 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 
 class PagesArtifactTest(unittest.TestCase):
+    def setUp(self):
+        self.site = artifact_directory()
+        self.html = (self.site / "index.html").read_text()
+        self.css = (self.site / "styles.css").read_text()
+        self.page = parse(self.html)
+        self.threads = self.page.find_all("article", cls="thread")
+
     def test_only_the_public_files_are_uploaded(self):
-        site = artifact_directory()
         workflow = (ROOT / ".github/workflows/pages.yml").read_text()
         self.assertRegex(workflow, r"(?m)^\s*include-hidden-files:\s*true\s*$")
         self.assertEqual(
-            {p.relative_to(site).as_posix() for p in site.rglob("*") if p.is_file()},
+            {p.relative_to(self.site).as_posix() for p in self.site.rglob("*") if p.is_file()},
             PUBLIC_FILES,
         )
 
-    def test_public_homepage_matches_owner_brand_and_uses_real_portrait(self):
-        site = artifact_directory()
-        html = (site / "index.html").read_text()
-        css = (site / "styles.css").read_text()
-        text = visible_text(html)
-        self.assertIn("Domenico Massafra", text)
-        self.assertIn(PROMISE, text)
-        self.assertIn(PAYOFF, text)
-        for section in ("verdetti", "esperimenti", "chi-sono", "contatti"):
-            self.assertIn(f'id="{section}"', html)
+    def test_every_conversation_is_complete_and_its_links_lead_somewhere(self):
+        self.assertEqual(len(self.page.find_all("h1")), 1)
+        self.assertEqual(len(self.threads), 10)
+        ids = [thread.attrs.get("id") for thread in self.threads]
+        self.assertEqual(len(set(ids)), len(ids), f"duplicate conversation id in {ids}")
+        self.assertEqual(ids[0], "chi-sono")
+        self.assertIn("contatto", ids)
 
-        # «Vale il tuo tempo?»: four native exclusive verdicts, one open at load.
-        verdicts = re.findall(r'<details\b[^>]*\bname="verdetto"[^>]*>', html)
-        self.assertEqual(len(verdicts), 4)
-        self.assertEqual(sum(bool(re.search(r"\sopen\b", tag)) for tag in verdicts), 1)
+        for thread in self.threads:
+            name = thread.attrs.get("id")
+            with self.subTest(thread=name):
+                self.assertTrue(name, "a conversation has no id")
+                self.assertTrue((thread.attrs.get("data-group") or "").strip(), "data-group is empty")
+                self.assertTrue((thread.attrs.get("data-keys") or "").strip(), "data-keys is empty")
+                if "data-badge" in thread.attrs:
+                    self.assertIn(thread.attrs["data-badge"], BADGES)
 
-        self.assertIn(INSTAGRAM_PROFILE, html)
-        self.assertIn("https://strumentini.it/", html)
-        self.assertIn("https://dichiarazionipubbliche.it/", html)
-        self.assertIn('src="/ritratto-instagram.jpg"', html)
-        self.assertIn('alt="Ritratto pubblicato sul profilo Instagram di Domenico Massafra"', html)
-        self.assertIn('name="theme-color" content="#0b0b0d"', html)
-        self.assertIn("prefers-reduced-motion", css)
-        self.assertIn("color-scheme:dark", css)
-        self.assertNotIn("PROTOTIPO NON PUBBLICO", html)
-        self.assertNotIn("mailto:", html)
+                asks = thread.find_all("h2", cls="ask")
+                self.assertEqual(len(asks), 1)
+                self.assertTrue(asks[0].text(), "the question is empty")
 
-        photo = (site / "ritratto-instagram.jpg").read_bytes()
+                runs = thread.find_all("details", cls="run")
+                self.assertEqual(len(runs), 1)
+                self.assertEqual(len(runs[0].find_all("summary")), 1)
+                self.assertGreaterEqual(len(runs[0].find_all("li")), 1)
+
+                replies = [div for div in thread.find_all("div", cls="reply")]
+                self.assertEqual(len(replies), 1)
+                self.assertTrue(replies[0].text(), "the answer is empty")
+
+                nexts = thread.find_all("nav", cls="next")
+                self.assertEqual(len(nexts), 1)
+                self.assertGreaterEqual(len(nexts[0].find_all("a")), 2)
+
+        # Guard for copy edited by hand: every suggested follow-up opens a real conversation.
+        for nav in self.page.find_all("nav", cls="next"):
+            for link in nav.find_all("a"):
+                href = link.attrs.get("href", "")
+                if href.startswith("#"):
+                    with self.subTest(link=href, text=link.text()):
+                        self.assertIn(href[1:], ids, f"suggested link {href} («{link.text()}») points to no conversation")
+
+        contact = self.threads[ids.index("contatto")]
+        handoffs = [a for a in contact.find_all("a", attr="data-handoff") if a.attrs.get("href") == INSTAGRAM_PROFILE]
+        self.assertEqual(len(handoffs), 1, "the contatto conversation must hand off to the Instagram profile")
+
+    def test_public_homepage_keeps_owner_copy_brand_and_real_portrait(self):
+        text = self.page.text()
+        for phrase in ("Domenico Massafra", PROMISE, LEDE, PAYOFF, "se disponibile"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, text)
+
+        hrefs = {a.attrs.get("href") for a in self.page.find_all("a")}
+        for url in (INSTAGRAM_PROFILE, "https://strumentini.it/", "https://dichiarazionipubbliche.it/", "https://github.com/domenicomassafra"):
+            with self.subTest(link=url):
+                self.assertIn(url, hrefs)
+
+        portraits = [img for img in self.page.find_all("img") if img.attrs.get("src") == "/ritratto-instagram.jpg"]
+        self.assertTrue(portraits)
+        self.assertIn(PORTRAIT_ALT, [img.attrs.get("alt") for img in portraits])
+        theme = [m for m in self.page.find_all("meta") if m.attrs.get("name") == "theme-color"]
+        self.assertEqual([m.attrs.get("content") for m in theme], ["#0b0b0d"])
+        self.assertIn("prefers-reduced-motion", self.css)
+        self.assertIn("color-scheme:dark", self.css)
+
+        for forbidden in ("mailto:", "instagram.com/direct/", "ig.me/", "PROTOTIPO NON PUBBLICO"):
+            with self.subTest(forbidden=forbidden):
+                self.assertNotIn(forbidden, self.html)
+        self.assertEqual(self.page.find_all("form"), [])
+
+        photo = (self.site / "ritratto-instagram.jpg").read_bytes()
         self.assertGreater(len(photo), 1000)
         self.assertTrue(photo.startswith(b"\xff\xd8"))
+        sources = {img.attrs.get("src") for img in self.page.find_all("img")}
         for mark in ("strumentini-mark.svg", "dichiarazioni-mark.svg"):
-            self.assertIn(f'src="/{mark}"', html)
-            self.assertIn("<svg", (site / mark).read_text())
+            self.assertIn(f"/{mark}", sources)
+            self.assertIn("<svg", (self.site / mark).read_text())
 
         # Social previews use the local share image.
-        self.assertRegex(html, r'<meta property="og:image" content="https://domenicomassafra\.it/share\.png">')
-        self.assertTrue((site / "share.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n"))
+        og = [m for m in self.page.find_all("meta") if m.attrs.get("property") == "og:image"]
+        self.assertEqual([m.attrs.get("content") for m in og], ["https://domenicomassafra.it/share.png"])
+        self.assertTrue((self.site / "share.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n"))
 
-        # «Tabellone»: the departure board is the real site navigation.
-        scripts = re.findall(r"<script\b[^>]*\bsrc=\"/board\.js\"[^>]*>", html)
+    def test_page_reads_without_the_script(self):
+        # The inline script adds class «app»; in the source the page must start as a plain list.
+        html_tag = self.page.find_all("html")[0]
+        self.assertNotIn("class", html_tag.attrs)
+        self.assertIn("html:not(.app)", self.css)
+
+        composer = self.page.find_all("div", cls="composer")
+        self.assertEqual(len(composer), 1)
+        self.assertIn("only-app", composer[0].classes)
+        for attr in ("data-menu", "data-new"):
+            buttons = self.page.find_all("button", attr=attr)
+            with self.subTest(button=attr):
+                self.assertEqual(len(buttons), 1)
+                self.assertIn("only-app", buttons[0].classes)
+
+        scripts = [s for s in self.page.find_all("script") if s.attrs.get("src") == "/app.js"]
         self.assertEqual(len(scripts), 1)
-        self.assertRegex(scripts[0], r"\sdefer\b")
-        self.assertIn('<nav class="board"', html)
-        board = html.split('<nav class="board"', 1)[1].split("</nav>", 1)[0]
-        rows = re.findall(r'<a\b[^>]*\bclass="row\b[^>]*>', board)
-        self.assertEqual(
-            [re.search(r'href="([^"]*)"', row).group(1) for row in rows],
-            ["#contatti", "#verdetti", "https://strumentini.it/", "https://dichiarazionipubbliche.it/", "#chi-sono"],
-        )
-        self.assertEqual(sum("row-live" in row for row in rows), 1)
-
-        # Without the script every split-flap element still shows its words.
-        flaps = flap_texts(html)
-        self.assertGreaterEqual(len(flaps), len(rows) * 2)
-        for index, flap in enumerate(flaps):
-            with self.subTest(flap=index):
-                self.assertTrue(flap, "a data-flap element is empty in the source")
-
-        # Sound stays hidden and off until the script and the visitor turn it on.
-        sound = re.findall(r"<button\b[^>]*\bdata-sound\b[^>]*>", html)
-        self.assertEqual(len(sound), 1)
-        self.assertRegex(sound[0], r"\shidden\b")
-        self.assertIn('aria-pressed="false"', sound[0])
-
-    def test_board_script_is_local_optional_and_silent_until_asked(self):
-        script_path = artifact_directory() / "board.js"
-        script = script_path.read_text()
-        self.assertIn("prefers-reduced-motion", script)
-        for forbidden in ("http://", "https://", "fetch(", "XMLHttpRequest", "localStorage", "document.cookie", "eval(", "innerHTML"):
-            with self.subTest(forbidden=forbidden):
-                self.assertNotIn(forbidden, script)
-
-        # Audio is created only by the visitor's click on the sound button.
-        self.assertEqual(script.count("new AudioContextClass()"), 1)
-        self.assertNotRegex(script, r"new\s+(window\.)?(webkit)?AudioContext\b")
-        self.assertIn("addEventListener('click'", script)
-        self.assertGreater(script.index("new AudioContextClass()"), script.index("addEventListener('click'"))
-
-        # CI's runner may lack Node; the syntax check runs wherever it exists.
-        if shutil.which("node"):
-            result = subprocess.run(["node", "--check", str(script_path)], capture_output=True, text=True)
-            self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("defer", scripts[0].attrs)
 
     def test_page_makes_no_remote_font_or_third_party_request(self):
-        site = artifact_directory()
-        html = (site / "index.html").read_text()
-        css = (site / "styles.css").read_text()
-        for source in (html, css):
+        for source in (self.html, self.css):
             self.assertNotIn("fonts.googleapis", source)
             self.assertNotIn("fonts.gstatic", source)
             self.assertNotRegex(source, r"url\(\s*[\"']?https?:")
-        self.assertNotRegex(html, r'\bsrc="(https?:)?//')
-        for tag in re.findall(r"<link\b[^>]*>", html):
-            if 'rel="canonical"' not in tag:
-                self.assertNotRegex(tag, r'href="(https?:)?//')
+        for element in self.page.find_all():
+            with self.subTest(tag=element.tag, src=element.attrs.get("src")):
+                self.assertNotRegex(element.attrs.get("src") or "", r"^(https?:)?//")
+        for link in self.page.find_all("link"):
+            if link.attrs.get("rel") != "canonical":
+                self.assertNotRegex(link.attrs.get("href", ""), r"^(https?:)?//")
 
-        # Every local reference resolves to a published file.
-        references = [m.strip("\"'") for m in re.findall(r"url\(([^)]+)\)", css)]
-        references += re.findall(r'(?:src|href)="(/[^"#?]*)"', html)
-        self.assertIn("/board.js", references)
+        # Every local reference (stylesheet, script, image, font, icon) resolves to a published file.
+        references = [m.strip("\"'") for m in re.findall(r"url\(([^)]+)\)", self.css)]
+        for element in self.page.find_all():
+            for attr in ("src", "href"):
+                value = element.attrs.get(attr) or ""
+                if value.startswith("/") and not value.startswith("//"):
+                    references.append(value.split("#")[0].split("?")[0])
+        self.assertIn("/app.js", references)
         for reference in references:
             with self.subTest(reference=reference):
-                target = site / (reference.lstrip("/") or "index.html")
+                target = self.site / (reference.lstrip("/") or "index.html")
                 self.assertTrue(target.is_file(), f"{reference} is not in site/")
 
-        # Every inline SVG icon points at a symbol defined in the page.
-        icons = re.findall(r'<use\b[^>]*\bhref="#([^"]+)"', html)
-        self.assertIn("freccia", icons)
-        for icon in set(icons):
+        # Every icon points at a symbol defined in the local sprite file.
+        symbols = set(re.findall(r'<symbol id="([^"]+)"', (self.site / "icons.svg").read_text()))
+        icons = {u.attrs["href"] for u in self.page.find_all("use") if "href" in u.attrs}
+        self.assertTrue(icons)
+        for icon in icons:
             with self.subTest(icon=icon):
-                self.assertIn(f'id="{icon}"', html)
+                file, _, name = icon.partition("#")
+                self.assertEqual(file, "/icons.svg")
+                self.assertIn(name, symbols, f"<use href=\"{icon}\"> has no <symbol>")
 
         for font in ("archivo.woff2", "jetbrains-mono.woff2"):
-            self.assertTrue((site / "fonts" / font).read_bytes().startswith(b"wOF2"))
-        self.assertIn("SIL OPEN FONT LICENSE", (site / "fonts/OFL.txt").read_text().upper())
+            self.assertTrue((self.site / "fonts" / font).read_bytes().startswith(b"wOF2"))
+        self.assertIn("SIL OPEN FONT LICENSE", (self.site / "fonts/OFL.txt").read_text().upper())
 
-    def test_contact_is_the_first_action_without_unverified_routes(self):
-        html = (artifact_directory() / "index.html").read_text()
-        css = (artifact_directory() / "styles.css").read_text()
+    def test_contact_stays_reachable_on_every_width(self):
+        footer = self.page.find_all("footer", cls="footer")
+        self.assertEqual(len(footer), 1)
+        contacts = footer[0].find_all("a", cls="footer-contact")
+        self.assertEqual([a.attrs.get("href") for a in contacts], [INSTAGRAM_PROFILE])
 
-        nav = html.split('<nav class="main-nav"', 1)[1].split("</nav>", 1)[0]
-        nav_links = re.findall(r"<a\b[^>]*>", nav)
-        self.assertGreaterEqual(len(nav_links), 2)
-        self.assertIn('href="#contatti"', nav_links[-1])
-
-        actions = html.split('<div class="hero-actions">', 1)[1].split("</div>", 1)[0]
-        action_links = re.findall(r"<a\b[^>]*>", actions)
-        self.assertEqual(len(action_links), 2)
-        self.assertIn("button-primary", action_links[0])
-        self.assertIn(f'href="{INSTAGRAM_PROFILE}"', action_links[0])
-        self.assertIn('href="#esperimenti"', action_links[1])
-        self.assertIn("se disponibile", html.lower())
-
-        footer = html.split('<footer class="footer">', 1)[1].split("</footer>", 1)[0]
-        self.assertIn(f'href="{INSTAGRAM_PROFILE}"', footer)
-        self.assertIn('class="footer-contact"', footer)
-
-        self.assertNotIn("mailto:", html)
-        self.assertNotIn("instagram.com/direct/", html)
-        self.assertNotIn("ig.me/", html)
-        self.assertNotRegex(html, r"<form\b")
-
-        # Narrow layouts must keep the contact action visible and usable.
-        self.assertIn("@media(max-width:350px)", css)
-        for selectors, body in re.findall(r"([^{}]+)\{([^{}]*)\}", css):
+        # No CSS rule may hide the contact links.
+        self.assertIn("@media(max-width:350px)", self.css)
+        for selectors, body in re.findall(r"([^{}]+)\{([^{}]*)\}", self.css):
             if not re.search(r"display:none|visibility:hidden", body):
                 continue
             for selector in selectors.split(","):
                 selector = re.sub(r":not\([^)]*\)", "", selector)
                 with self.subTest(hidden=selector.strip()):
-                    self.assertNotIn("nav-contact", selector)
                     self.assertNotIn("footer-contact", selector)
-                    self.assertNotIn(":first-child", selector.replace("::", ""))
+                    self.assertNotIn("data-handoff", selector)
 
     def test_brand_tokens_equal_the_owner_canon(self):
-        tokens = root_tokens((artifact_directory() / "styles.css").read_text())
+        tokens = root_tokens(self.css)
         for name, value in CANON_TOKENS.items():
             with self.subTest(token=name):
                 self.assertEqual(tokens.get(name), value)
 
     def test_brand_tokens_keep_wcag_aa_contrast(self):
-        tokens = root_tokens((artifact_directory() / "styles.css").read_text())
-        # Body text 4.5:1, large text 3:1; borders are decoration and are not asserted.
-        for foreground, background, minimum in (
-            ("--white", "--carbon", 4.5),
-            ("--ash", "--carbon", 4.5),
-            ("--ash", "--panel", 4.5),
-            ("--signal-bright", "--carbon", 4.5),
-            ("--signal-bright", "--panel", 4.5),
-            ("--carbon", "--paper", 4.5),
-            ("--graphite", "--paper", 4.5),
-            ("--graphite", "--white", 4.5),
-            ("--carbon", "--signal-bright", 4.5),
-            ("--white", "--signal", 4.5),
-            ("--signal", "--paper", 3.0),  # large text only
-            # Split-flap cells, and the board row hover background.
-            ("--white", "--flap", 4.5),
-            ("--signal-bright", "--flap", 4.5),
-            ("--ash", "--flap", 4.5),
+        tokens = root_tokens(self.css)
+        # Body text 4.5:1 on every ground the chat uses: page, sidebar/composer, question bubble.
+        for foreground, background in (
+            ("--paper", "--carbon"),
+            ("--paper", "--panel"),
+            ("--paper", "--raise"),
+            ("--white", "--raise"),
+            ("--ash", "--carbon"),
+            ("--ash", "--panel"),
+            ("--ash", "--raise"),
+            ("--signal-bright", "--carbon"),
+            ("--carbon", "--signal-bright"),  # send button icon
+            ("--carbon", "--paper"),  # Paper buttons and the «Sì» badge
         ):
             with self.subTest(foreground=foreground, background=background):
                 ratio = contrast_ratio(tokens[foreground], tokens[background])
-                self.assertGreaterEqual(round(ratio, 2), minimum)
+                self.assertGreaterEqual(round(ratio, 2), 4.5)
 
         # The page ground must stay a real dark theme, with white text on it.
         self.assertLess(relative_luminance(tokens["--carbon"]), 0.02)
         self.assertGreater(relative_luminance(tokens["--white"]), 0.7)
 
     def test_public_routes_and_private_repository_paths(self):
-        site = artifact_directory()
-        handler = functools.partial(QuietHandler, directory=str(site))
+        handler = functools.partial(QuietHandler, directory=str(self.site))
         with ThreadingHTTPServer(("127.0.0.1", 0), handler) as server:
             thread = threading.Thread(target=server.serve_forever, daemon=True)
             thread.start()
@@ -336,7 +366,8 @@ class PagesArtifactTest(unittest.TestCase):
                 for path in (
                     "/",
                     "/styles.css",
-                    "/board.js",
+                    "/app.js",
+                    "/icons.svg",
                     "/favicon.svg",
                     "/ritratto-instagram.jpg",
                     "/strumentini-mark.svg",
@@ -350,7 +381,7 @@ class PagesArtifactTest(unittest.TestCase):
                     with self.subTest(path=path), urlopen(base + path) as response:
                         self.assertEqual(response.status, 200)
                         self.assertTrue(response.read())
-                for path in ("/README.md", "/docs/domain-cutover.md", "/scripts/domain-status.sh"):
+                for path in ("/board.js", "/README.md", "/docs/domain-cutover.md", "/scripts/domain-status.sh"):
                     with self.subTest(path=path), self.assertRaises(HTTPError) as error:
                         urlopen(base + path)
                     self.assertEqual(error.exception.code, 404)
