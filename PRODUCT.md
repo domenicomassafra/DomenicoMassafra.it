@@ -27,7 +27,7 @@ Visitatori in arrivo dal profilo Instagram o dai motori di ricerca, anche su tel
 - Sito statico HTML/CSS su GitHub Pages con HTTPS e dominio `domenicomassafra.it`. Pubblicazione automatica da `main` con workflow `.github/workflows/pages.yml`.
 - CTA primaria: contattare Domenico per affrontare problemi pratici usando l'AI. I link a Strumentini.it, DichiarazioniPubbliche.it e GitHub restano accessibili come prove/progetti reali, senza inventare clienti o lavori commissionati.
 - Interazioni comprensibili con mouse, touch e tastiera, fallback statico e supporto a `prefers-reduced-motion`. Niente marchi o mascotte di terzi senza verifica caso per caso.
-- Direzione visiva: dal 15 novembre 2026 il sito applica alla lettera il sistema di marca canonico (palette, Archivo + JetBrains Mono, label `// `), dopo le bocciature del 2 e del 14 novembre; dettagli in `DESIGN.md`.
+- Direzione visiva: dal 15 novembre 2026 il mondo «Tabellone» (issue #19), un tabellone partenze a palette che fa da navigazione, sulla palette e sui caratteri del canone di marca; sostituisce le direzioni bocciate il 2 e il 14 novembre e quella della #18 («troppo naif»); dettagli in `DESIGN.md`.
 - Sono ancora da approvare: lo scatto originale ad alta risoluzione e il ritaglio definitivo, la prima guida/storia verificata, l'eventuale indirizzo email pubblico.
 
 ## Brand Commitments
@@ -41,7 +41,7 @@ Visitatori in arrivo dal profilo Instagram o dai motori di ricerca, anche su tel
 - Progetti visitabili: `https://strumentini.it/`, `https://dichiarazionipubbliche.it/`, `https://github.com/domenicomassafra`.
 - Profilo Instagram pubblico verificato: `https://www.instagram.com/domenico.massafraa/`.
 - `docs/prototypes/` conserva solo materiale storico della issue #9 (varianti del 30 ottobre e catture delle versioni precedenti); quelle direzioni sono superate: «Officina ribelle» bocciata il 2 novembre, «Officina cinetica» il 14 novembre.
-- Il 7 novembre 2026 è stato recuperato il JPEG 150×150 dalla proprietà og:image pubblica del profilo Instagram verificato. Copia locale: site/ritratto-instagram.jpg, mostrata a 76 px. È una fonte reale, ma la qualità e la scelta finale dello scatto restano da confermare con l'owner.
+- Il 7 novembre 2026 è stato recuperato il JPEG 150×150 dalla proprietà og:image pubblica del profilo Instagram verificato. Copia locale: site/ritratto-instagram.jpg, mostrata alla misura naturale di 150 px sulla tessera di «Chi sono». È una fonte reale, ma la qualità e la scelta finale dello scatto restano da confermare con l'owner.
 
 ## Product Principles
 

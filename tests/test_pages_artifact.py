@@ -1,9 +1,12 @@
 """Exercise the exact directory configured for the Pages artifact over HTTP."""
 
 import functools
+from html.parser import HTMLParser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import re
+import shutil
+import subprocess
 import threading
 from urllib.error import HTTPError
 from urllib.request import urlopen
@@ -27,6 +30,7 @@ PUBLIC_FILES = {
     ".nojekyll",
     "index.html",
     "styles.css",
+    "board.js",
     "ritratto-instagram.jpg",
     "strumentini-mark.svg",
     "dichiarazioni-mark.svg",
@@ -50,6 +54,42 @@ def root_tokens(css):
 def visible_text(html):
     html = re.sub(r"(?s)<(script|style)\b.*?</\1>", " ", html)
     return " ".join(re.sub(r"<[^>]+>", " ", html).split())
+
+
+class FlapText(HTMLParser):
+    """Collect the source text inside every element marked data-flap."""
+
+    VOID = {"area", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
+
+    def __init__(self):
+        super().__init__()
+        self.stack = []  # one entry per open element: index into self.texts, or None
+        self.texts = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag in self.VOID:
+            return
+        if "data-flap" in dict(attrs):
+            self.texts.append("")
+            self.stack.append(len(self.texts) - 1)
+        else:
+            self.stack.append(None)
+
+    def handle_endtag(self, tag):
+        if tag not in self.VOID and self.stack:
+            self.stack.pop()
+
+    def handle_data(self, data):
+        for index in self.stack:
+            if index is not None:
+                self.texts[index] += data
+
+
+def flap_texts(html):
+    parser = FlapText()
+    parser.feed(html)
+    parser.close()
+    return [" ".join(text.split()) for text in parser.texts]
 
 
 def relative_luminance(hex_colour):
@@ -135,6 +175,51 @@ class PagesArtifactTest(unittest.TestCase):
         self.assertRegex(html, r'<meta property="og:image" content="https://domenicomassafra\.it/share\.png">')
         self.assertTrue((site / "share.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n"))
 
+        # «Tabellone»: the departure board is the real site navigation.
+        scripts = re.findall(r"<script\b[^>]*\bsrc=\"/board\.js\"[^>]*>", html)
+        self.assertEqual(len(scripts), 1)
+        self.assertRegex(scripts[0], r"\sdefer\b")
+        self.assertIn('<nav class="board"', html)
+        board = html.split('<nav class="board"', 1)[1].split("</nav>", 1)[0]
+        rows = re.findall(r'<a\b[^>]*\bclass="row\b[^>]*>', board)
+        self.assertEqual(
+            [re.search(r'href="([^"]*)"', row).group(1) for row in rows],
+            ["#contatti", "#verdetti", "https://strumentini.it/", "https://dichiarazionipubbliche.it/", "#chi-sono"],
+        )
+        self.assertEqual(sum("row-live" in row for row in rows), 1)
+
+        # Without the script every split-flap element still shows its words.
+        flaps = flap_texts(html)
+        self.assertGreaterEqual(len(flaps), len(rows) * 2)
+        for index, flap in enumerate(flaps):
+            with self.subTest(flap=index):
+                self.assertTrue(flap, "a data-flap element is empty in the source")
+
+        # Sound stays hidden and off until the script and the visitor turn it on.
+        sound = re.findall(r"<button\b[^>]*\bdata-sound\b[^>]*>", html)
+        self.assertEqual(len(sound), 1)
+        self.assertRegex(sound[0], r"\shidden\b")
+        self.assertIn('aria-pressed="false"', sound[0])
+
+    def test_board_script_is_local_optional_and_silent_until_asked(self):
+        script_path = artifact_directory() / "board.js"
+        script = script_path.read_text()
+        self.assertIn("prefers-reduced-motion", script)
+        for forbidden in ("http://", "https://", "fetch(", "XMLHttpRequest", "localStorage", "document.cookie", "eval(", "innerHTML"):
+            with self.subTest(forbidden=forbidden):
+                self.assertNotIn(forbidden, script)
+
+        # Audio is created only by the visitor's click on the sound button.
+        self.assertEqual(script.count("new AudioContextClass()"), 1)
+        self.assertNotRegex(script, r"new\s+(window\.)?(webkit)?AudioContext\b")
+        self.assertIn("addEventListener('click'", script)
+        self.assertGreater(script.index("new AudioContextClass()"), script.index("addEventListener('click'"))
+
+        # CI's runner may lack Node; the syntax check runs wherever it exists.
+        if shutil.which("node"):
+            result = subprocess.run(["node", "--check", str(script_path)], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+
     def test_page_makes_no_remote_font_or_third_party_request(self):
         site = artifact_directory()
         html = (site / "index.html").read_text()
@@ -151,11 +236,18 @@ class PagesArtifactTest(unittest.TestCase):
         # Every local reference resolves to a published file.
         references = [m.strip("\"'") for m in re.findall(r"url\(([^)]+)\)", css)]
         references += re.findall(r'(?:src|href)="(/[^"#?]*)"', html)
-        self.assertTrue(references)
+        self.assertIn("/board.js", references)
         for reference in references:
             with self.subTest(reference=reference):
                 target = site / (reference.lstrip("/") or "index.html")
                 self.assertTrue(target.is_file(), f"{reference} is not in site/")
+
+        # Every inline SVG icon points at a symbol defined in the page.
+        icons = re.findall(r'<use\b[^>]*\bhref="#([^"]+)"', html)
+        self.assertIn("freccia", icons)
+        for icon in set(icons):
+            with self.subTest(icon=icon):
+                self.assertIn(f'id="{icon}"', html)
 
         for font in ("archivo.woff2", "jetbrains-mono.woff2"):
             self.assertTrue((site / "fonts" / font).read_bytes().startswith(b"wOF2"))
@@ -220,6 +312,10 @@ class PagesArtifactTest(unittest.TestCase):
             ("--carbon", "--signal-bright", 4.5),
             ("--white", "--signal", 4.5),
             ("--signal", "--paper", 3.0),  # large text only
+            # Split-flap cells, and the board row hover background.
+            ("--white", "--flap", 4.5),
+            ("--signal-bright", "--flap", 4.5),
+            ("--ash", "--flap", 4.5),
         ):
             with self.subTest(foreground=foreground, background=background):
                 ratio = contrast_ratio(tokens[foreground], tokens[background])
@@ -240,6 +336,7 @@ class PagesArtifactTest(unittest.TestCase):
                 for path in (
                     "/",
                     "/styles.css",
+                    "/board.js",
                     "/favicon.svg",
                     "/ritratto-instagram.jpg",
                     "/strumentini-mark.svg",
