@@ -3,25 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b0d0e">
+  <meta name="theme-color" content="#0b0b0d">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="Sono Domenico Massafra. Metto alla prova agenti e strumenti AI su problemi veri, racconto cosa funziona e dove servono ancora le persone. Hai un problema? Scrivimi.">
+  <meta name="description" content="Sono Domenico Massafra. Non sono un programmatore e ogni giorno faccio lavorare gli agenti AI su problemi veri. Ti mostro cosa funziona, cosa no e da dove iniziare.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="it_IT">
-  <meta property="og:title" content="Domenico Massafra — L'AI, alla prova dei fatti">
-  <meta property="og:description" content="Esperimenti, progetti e problemi concreti. Provo gli agenti AI, controllo i risultati e racconto cosa imparo, anche se non programmi.">
+  <meta property="og:site_name" content="Domenico Massafra">
+  <meta property="og:title" content="Domenico Massafra — Agenti AI su problemi veri">
+  <meta property="og:description" content="Faccio lavorare gli agenti AI su problemi veri. Ti mostro cosa funziona, anche se non programmi.">
   <meta property="og:url" content="https://domenicomassafra.it/">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://domenicomassafra.it/share.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://domenicomassafra.it/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/styles.css">
-  <title>Domenico Massafra — L'AI, alla prova dei fatti</title>
+  <title>Domenico Massafra — Agenti AI su problemi veri</title>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Domenico Massafra",
       "url": "https://domenicomassafra.it/",
+      "image": "https://domenicomassafra.it/ritratto-instagram.jpg",
+      "description": "Non programmatore che lavora ogni giorno con gli agenti AI e mostra a chi lavora cosa si può costruire davvero.",
       "sameAs": [
         "https://github.com/domenicomassafra",
         "https://www.instagram.com/domenico.massafraa/"
@@ -32,110 +39,188 @@
 <body>
   <a class="skip-link" href="#contenuto">Vai al contenuto</a>
   <header class="site-header">
-    <div class="header-inner">
-      <a class="brand" href="/" aria-label="Domenico Massafra, homepage">Domenico <span>Massafra</span><span class="brand-slash" aria-hidden="true">//</span></a>
+    <div class="wrap header-inner">
+      <a class="brand" href="/" aria-label="Domenico Massafra, homepage">Domenico Massafra<span aria-hidden="true">//</span></a>
       <nav class="main-nav" aria-label="Navigazione principale">
-        <a class="nav-contact" href="#contatti">Collaboriamo</a>
-        <a href="#esperimenti">Esperimenti</a>
+        <a href="#verdetti">Verdetti</a>
+        <a href="#esperimenti">Progetti</a>
         <a href="#chi-sono">Chi sono</a>
+        <a class="nav-contact" href="#contatti">Scrivimi</a>
       </nav>
     </div>
   </header>
+
   <main id="contenuto">
     <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-content">
-        <h1 id="hero-title">L'AI fa cose incredibili.<br><em>Vediamo quali.</em></h1>
-        <p class="hero-intro">Sono Domenico Massafra. Faccio lavorare gli agenti AI su problemi veri, controllo i risultati e racconto cosa ho imparato. Anche quando qualcosa va storto.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="https://www.instagram.com/domenico.massafraa/" rel="me">Raccontami il tuo problema</a>
-          <a class="button button-text" href="#esperimenti">Guarda cosa sto costruendo</a>
-        </div>
-        <p class="contact-note">Il primo link apre il mio profilo Instagram. Se compare «Messaggio», puoi scrivermi da lì.</p>
-      </div>
-      <aside class="hero-sheet" aria-label="Un ritratto e una nota sul metodo">
-        <div class="sheet-head"><span>Domenico, in persona</span><span>APPUNTI / 001</span></div>
-        <div class="portrait-frame">
-          <img src="/ritratto-instagram.jpg" alt="Ritratto pubblicato sul profilo Instagram di Domenico Massafra" width="150" height="150" fetchpriority="high">
-          <div class="portrait-words" aria-hidden="true"><span>Provo.</span><span>Controllo.</span><span>Racconto.</span></div>
-        </div>
-        <p class="sheet-caption">Ho studiato economia e marketing. Non sono uno sviluppatore: provo a costruire cose utili con l'AI e mostro anche i limiti.</p>
-        <div class="sheet-foot"><span>Persona prima del prompt.</span><span aria-hidden="true">DM / 26</span></div>
-      </aside>
-    </section>
-    <div class="statement"><p>Non devi capire <em>tutto</em>. Devi capirne <strong>abbastanza</strong> per decidere cosa fare.</p></div>
-    <section class="work section-inner" id="esperimenti" aria-labelledby="work-title">
-      <div class="section-heading">
-        <h2 id="work-title">Le idee si giudicano <em>da quello che fanno.</em></h2>
-        <p>Questi sono due progetti reali che puoi aprire oggi. Sono esperimenti e lavori personali in costruzione, senza presentarli come casi di clienti.</p>
-      </div>
-      <div class="work-list">
-        <article class="work-item">
-          <div class="work-index"><span>01</span><span>STRUMENTI ONLINE</span></div>
-          <div class="work-content">
-            <h3>Strumentini.it</h3>
-            <p>Piccoli strumenti web per compiti concreti. Li costruisco e li miglioro a partire dai problemi che incontro.</p>
-            <a href="https://strumentini.it/" aria-label="Visita Strumentini.it">Esplora gli strumenti <span aria-hidden="true">↗</span></a>
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="label">// AI per chi lavora, anche senza codice</p>
+          <h1 id="hero-title">Faccio lavorare gli agenti AI su <em>problemi veri.</em></h1>
+          <p class="hero-lede">Ti mostro cosa funziona, anche se non programmi.</p>
+          <p class="hero-text">Ho studiato economia e marketing, non informatica. Ogni giorno do compiti veri agli agenti AI, controllo cosa combinano e ti racconto anche dove si rompono.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://www.instagram.com/domenico.massafraa/" rel="me">Raccontami il tuo problema <span aria-hidden="true">↗</span></a>
+            <a class="button button-ghost" href="#esperimenti">Guarda cosa ho costruito</a>
           </div>
-          <div class="work-sign work-sign-one" aria-hidden="true"><span>fare</span><img src="/strumentini-mark.svg" width="100" height="100" alt="" loading="lazy"><span>provare</span></div>
-        </article>
-        <article class="work-item">
-          <div class="work-index"><span>02</span><span>FONTI E CONTESTO</span></div>
-          <div class="work-content">
-            <h3>Dichiarazioni<wbr>Pubbliche.it</h3>
-            <p>Un progetto per consultare dichiarazioni pubbliche, risalire alle fonti e capire meglio il contesto.</p>
-            <a href="https://dichiarazionipubbliche.it/" aria-label="Visita DichiarazioniPubbliche.it">Apri il progetto <span aria-hidden="true">↗</span></a>
+          <p class="contact-note">Il primo pulsante apre il mio profilo Instagram: mi scrivi da «Messaggio», se disponibile.</p>
+        </div>
+
+        <aside class="board" aria-label="Come lavoro, in quattro passaggi">
+          <div class="board-head">
+            <img src="/ritratto-instagram.jpg" alt="Ritratto pubblicato sul profilo Instagram di Domenico Massafra" width="150" height="150" fetchpriority="high">
+            <p><strong>Domenico Massafra</strong><span class="label">// non programmatore</span></p>
           </div>
-          <div class="work-sign work-sign-two" aria-hidden="true"><span>FONTE</span><img src="/dichiarazioni-mark.svg" width="100" height="100" alt="" loading="lazy"><span>CONTESTO</span></div>
-        </article>
+          <ol class="steps">
+            <li><span class="label">// richiesta</span><span>Spiego il compito a parole, come a un collega.</span></li>
+            <li><span class="label">// agenti</span><span>Lo fanno loro, un passaggio dopo l'altro.</span></li>
+            <li><span class="label">// controllo</span><span>Guardo cosa hanno fatto davvero. E dove hanno sbagliato.</span></li>
+            <li><span class="label">// verdetto</span><span>Ti dico se vale il tuo tempo.</span></li>
+          </ol>
+          <p class="board-foot" aria-hidden="true"><span>Sì</span><span>Dipende</span><span>No</span></p>
+        </aside>
       </div>
-      <p class="work-after">Preferisci guardare sotto il cofano? <a href="https://github.com/domenicomassafra" rel="me">Trovi i progetti anche su GitHub.</a></p>
     </section>
+
+    <section class="statement" aria-label="La mia idea di fondo">
+      <div class="wrap">
+        <p>Non devi saper programmare. <em>Devi capirne abbastanza.</em></p>
+      </div>
+    </section>
+
     <section class="method" aria-labelledby="method-title">
-      <div class="section-inner method-inner">
-        <div class="method-title">
-          <h2 id="method-title">La parte interessante viene <em>dopo la demo.</em></h2>
-          <p>Un risultato che sembra convincente merita una domanda in più. È così che provo a distinguere una cosa utile da una bella presentazione.</p>
+      <div class="wrap">
+        <p class="label">// il metodo</p>
+        <h2 id="method-title">Ogni cosa che provo passa da tre domande.</h2>
+        <ol class="three">
+          <li>
+            <span class="label">// 01</span>
+            <h3>Cosa conta</h3>
+            <p>Tra cento novità ne scelgo una e ti dico perché riguarda il tuo lavoro. Le altre novantanove puoi ignorarle.</p>
+          </li>
+          <li>
+            <span class="label">// 02</span>
+            <h3>Come funziona</h3>
+            <p>La provo sul serio e ti faccio vedere i passaggi con parole normali. Se serve un termine tecnico, lo traduco.</p>
+          </li>
+          <li>
+            <span class="label">// 03</span>
+            <h3>Cosa farne</h3>
+            <p>Chiudo con una decisione: provala, aspetta o lascia perdere. Con il limite scritto accanto.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="verdicts" id="verdetti" aria-labelledby="verdicts-title">
+      <div class="wrap verdicts-grid">
+        <div class="verdicts-intro">
+          <p class="label">// il format</p>
+          <h2 id="verdicts-title">Vale il tuo <em>tempo?</em></h2>
+          <p>Una domanda, un verdetto, il limite. Scegline una e aprila.</p>
+          <p class="fine">Sono opinioni mie, nate dall'uso di ogni giorno. Non sono test misurati.</p>
         </div>
-        <div class="method-example">
-          <p class="example-strap">Prova il ragionamento</p>
-          <details>
-            <summary>
-              <strong>«Basta un prompt e l'AI fa tutto da sola?»</strong>
-              <span class="open-label">Apri il verdetto <span aria-hidden="true">+</span></span>
-            </summary>
-            <div class="example-answer">
-              <p class="verdict">Dipende.</p>
-              <p>Dal compito, dagli strumenti, dai dati e da come controlli il risultato. Un agente può aiutare molto; verificare resta un lavoro umano.</p>
-              <p class="example-caveat">Esempio editoriale, non il risultato misurato di un test.</p>
+        <div class="verdict-list">
+          <details name="verdetto" open>
+            <summary><span>«Basta un prompt e l'AI fa tutto da sola?»</span></summary>
+            <div class="answer">
+              <p class="verdict verdict-maybe"><span class="label">// verdetto</span>Dipende.</p>
+              <p>Dal compito, dagli strumenti e da come controlli il risultato. Un agente, cioè un'AI che fa i passaggi da sola, può portarti molto avanti.</p>
+              <p class="limit"><span class="label">// limite</span>Verificare resta un lavoro tuo.</p>
+            </div>
+          </details>
+          <details name="verdetto">
+            <summary><span>«Per usare gli agenti AI devo saper programmare?»</span></summary>
+            <div class="answer">
+              <p class="verdict verdict-no"><span class="label">// verdetto</span>No.</p>
+              <p>Devi saper spiegare bene cosa vuoi, come faresti con un collaboratore. Io non sono uno sviluppatore e ci lavoro ogni giorno.</p>
+              <p class="limit"><span class="label">// limite</span>Sicurezza, dati sensibili e software critico chiedono competenze tecniche vere.</p>
+            </div>
+          </details>
+          <details name="verdetto">
+            <summary><span>«Posso iniziare con ChatGPT gratis?»</span></summary>
+            <div class="answer">
+              <p class="verdict verdict-yes"><span class="label">// verdetto</span>Sì.</p>
+              <p>Per capire se l'AI ti serve basta la versione gratuita. La differenza la fa il contesto che le dai: chi sei, cosa fai, cosa vuoi ottenere.</p>
+              <p class="limit"><span class="label">// limite</span>Per i compiti lunghi e ripetitivi poi serve qualcosa in più.</p>
+            </div>
+          </details>
+          <details name="verdetto">
+            <summary><span>«Posso dare all'AI i dati dei miei clienti senza pensarci?»</span></summary>
+            <div class="answer">
+              <p class="verdict verdict-no"><span class="label">// verdetto</span>No.</p>
+              <p>Prima guarda dove finiscono quei dati e chi può leggerli. Per fare una prova bastano esempi finti o anonimi.</p>
+              <p class="limit"><span class="label">// limite</span>Se hai un dubbio, chiedi a chi si occupa di privacy.</p>
             </div>
           </details>
         </div>
       </div>
     </section>
-    <section class="about section-inner" id="chi-sono" aria-labelledby="about-title">
-      <div class="about-name" aria-hidden="true"><span>DM</span><span class="about-rule"></span></div>
-      <div class="about-copy">
-        <h2 id="about-title">Piacere, <em>Domenico.</em></h2>
-        <p>Vengo dall'economia e dal marketing. Mi interessano i problemi reali, le idee un po' improbabili e quello che succede quando provi a trasformarle in qualcosa che funziona.</p>
-        <p>Provo agenti e strumenti AI senza fingere che ogni esperimento riesca al primo colpo. Se una cosa non funziona, è spesso il momento in cui si impara di più.</p>
-        <a href="https://www.instagram.com/domenico.massafraa/" rel="me">Seguimi su Instagram <span aria-hidden="true">↗</span></a>
+
+    <section class="work" id="esperimenti" aria-labelledby="work-title">
+      <div class="wrap">
+        <div class="work-head">
+          <div>
+            <p class="label">// l'ho fatto fare agli agenti</p>
+            <h2 id="work-title">Cose vere, che puoi aprire <em>adesso.</em></h2>
+          </div>
+          <p>Due progetti personali che costruisco facendo lavorare gli agenti AI. Sono esperimenti in corso, non lavori per clienti.</p>
+        </div>
+        <div class="work-list">
+          <a class="work-card" href="https://strumentini.it/">
+            <img src="/strumentini-mark.svg" width="64" height="64" alt="" loading="lazy">
+            <span class="label">// 01 · strumenti online</span>
+            <h3>Strumentini.it</h3>
+            <p>Strumenti web per lavori piccoli: unire due PDF, pulire un CSV, calcolare un margine. Gratis e senza account; i file restano nel browser.</p>
+            <span class="card-link">Apri gli strumenti <span aria-hidden="true">↗</span></span>
+          </a>
+          <a class="work-card" href="https://dichiarazionipubbliche.it/">
+            <img src="/dichiarazioni-mark.svg" width="64" height="64" alt="" loading="lazy">
+            <span class="label">// 02 · fonti e contesto</span>
+            <h3>Dichiarazioni<wbr>Pubbliche.it</h3>
+            <p>Un archivio per ritrovare dichiarazioni pubbliche con la fonte, il contesto e le correzioni accanto.</p>
+            <span class="card-link">Apri il progetto <span aria-hidden="true">↗</span></span>
+          </a>
+        </div>
+        <p class="work-after">Vuoi guardare sotto il cofano? <a href="https://github.com/domenicomassafra" rel="me">Il codice è su GitHub</a>.</p>
       </div>
     </section>
+
+    <section class="about" id="chi-sono" aria-labelledby="about-title">
+      <div class="wrap about-grid">
+        <div class="about-side">
+          <p class="label">// chi sono</p>
+          <h2 id="about-title">Piacere, <em>Domenico.</em></h2>
+          <p class="pull">Non sei indietro. Ti hanno fatto credere di esserlo.</p>
+        </div>
+        <div class="about-copy">
+          <p class="big">Non sono un programmatore. Ho studiato economia e marketing, e ogni giorno lavoro con gli agenti AI.</p>
+          <p>Ho capito una cosa: non devi capire tutto, devi capirne abbastanza. Abbastanza da spiegare cosa vuoi, provarlo, vedere dove si rompe e decidere se vale il tuo tempo.</p>
+          <p>Qui e nei miei video non trovi il prompt segreto e nemmeno la paura di restare fuori. Trovi prove, errori compresi, e un primo passo piccolo se parti da zero.</p>
+          <a class="text-link" href="https://www.instagram.com/domenico.massafraa/" rel="me">Guarda i video su Instagram <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+    </section>
+
     <section class="contact" id="contatti" aria-labelledby="contact-title">
-      <div class="section-inner contact-inner">
-        <h2 id="contact-title">Hai un problema concreto?<br><em>Cominciamo da lì.</em></h2>
-        <p>Un lavoro ripetitivo, un processo da semplificare, un'idea da mettere alla prova. Raccontami cosa vuoi ottenere: vediamo se e come l'AI può aiutarti.</p>
-        <a class="button button-light" href="https://www.instagram.com/domenico.massafraa/" rel="me">Contattami su Instagram</a>
-        <p class="contact-small">Si apre il mio profilo. Per scrivermi può essere necessario accedere a Instagram e usare il pulsante «Messaggio», se disponibile.</p>
+      <div class="wrap">
+        <p class="label">// tocca a te</p>
+        <h2 id="contact-title">Hai un compito che ripeti sempre? Partiamo da lì.</h2>
+        <p>Un lavoro ripetitivo, un processo da semplificare, un'idea da mettere alla prova. Raccontami cosa vuoi ottenere: vediamo se l'AI serve davvero, e come.</p>
+        <a class="button button-light" href="https://www.instagram.com/domenico.massafraa/" rel="me">Scrivimi su Instagram <span aria-hidden="true">↗</span></a>
+        <p class="contact-small">Si apre il mio profilo. Per scrivermi può servire accedere a Instagram e usare il pulsante «Messaggio», se disponibile.</p>
       </div>
     </section>
   </main>
+
   <footer class="footer">
-    <div class="footer-inner">
-      <a class="footer-brand" href="/">Domenico Massafra<span aria-hidden="true"> //</span></a>
-      <p>© 2026 Domenico Massafra. Esperimenti, spiegazioni, qualche errore utile.</p>
-      <a class="footer-contact" href="https://www.instagram.com/domenico.massafraa/" rel="me">Contattami su Instagram</a>
-      <a href="#contenuto">Torna su</a>
+    <div class="wrap footer-inner">
+      <a class="brand" href="/">Domenico Massafra<span aria-hidden="true">//</span></a>
+      <p>© 2026 Domenico Massafra. Prove, spiegazioni, qualche errore utile.</p>
+      <nav aria-label="Collegamenti finali">
+        <a class="footer-contact" href="https://www.instagram.com/domenico.massafraa/" rel="me">Instagram</a>
+        <a href="https://github.com/domenicomassafra" rel="me">GitHub</a>
+        <a href="#contenuto">Torna su</a>
+      </nav>
     </div>
   </footer>
 </body>

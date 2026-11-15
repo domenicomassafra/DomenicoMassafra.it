@@ -12,6 +12,17 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 INSTAGRAM_PROFILE = "https://www.instagram.com/domenico.massafraa/"
+PROMISE = "Faccio lavorare gli agenti AI su problemi veri. Ti mostro cosa funziona, anche se non programmi."
+PAYOFF = "Non devi saper programmare. Devi capirne abbastanza."
+# Owner brand canon (BRAND.md). Any other value is off-palette.
+CANON_TOKENS = {
+    "--carbon": "#0b0b0d",
+    "--paper": "#f5f0e8",
+    "--signal": "#d63f28",
+    "--signal-bright": "#ff5a3c",
+    "--ash": "#9a948b",
+    "--graphite": "#66615b",
+}
 PUBLIC_FILES = {
     ".nojekyll",
     "index.html",
@@ -20,6 +31,10 @@ PUBLIC_FILES = {
     "strumentini-mark.svg",
     "dichiarazioni-mark.svg",
     "favicon.svg",
+    "share.png",
+    "fonts/archivo.woff2",
+    "fonts/jetbrains-mono.woff2",
+    "fonts/OFL.txt",
     "robots.txt",
     "sitemap.xml",
 }
@@ -30,6 +45,11 @@ def root_tokens(css):
     if match is None:
         raise AssertionError("styles.css must declare its tokens in :root")
     return dict(re.findall(r"(--[a-z-]+):(#[0-9a-f]{6})", match.group(1)))
+
+
+def visible_text(html):
+    html = re.sub(r"(?s)<(script|style)\b.*?</\1>", " ", html)
+    return " ".join(re.sub(r"<[^>]+>", " ", html).split())
 
 
 def relative_luminance(hex_colour):
@@ -81,31 +101,65 @@ class PagesArtifactTest(unittest.TestCase):
         site = artifact_directory()
         html = (site / "index.html").read_text()
         css = (site / "styles.css").read_text()
-        self.assertIn("Domenico Massafra", html)
-        self.assertIn("L'AI fa cose incredibili.", html)
-        self.assertIn("Vediamo quali.", html)
-        self.assertIn("Non devi capire", html)
-        self.assertIn('id="esperimenti"', html)
-        self.assertIn('id="contatti"', html)
-        self.assertIn('class="method-example"', html)
-        self.assertIn("<details>", html)
-        self.assertIn("https://www.instagram.com/domenico.massafraa/", html)
+        text = visible_text(html)
+        self.assertIn("Domenico Massafra", text)
+        self.assertIn(PROMISE, text)
+        self.assertIn(PAYOFF, text)
+        for section in ("verdetti", "esperimenti", "chi-sono", "contatti"):
+            self.assertIn(f'id="{section}"', html)
+
+        # «Vale il tuo tempo?»: four native exclusive verdicts, one open at load.
+        verdicts = re.findall(r'<details\b[^>]*\bname="verdetto"[^>]*>', html)
+        self.assertEqual(len(verdicts), 4)
+        self.assertEqual(sum(bool(re.search(r"\sopen\b", tag)) for tag in verdicts), 1)
+
+        self.assertIn(INSTAGRAM_PROFILE, html)
         self.assertIn("https://strumentini.it/", html)
         self.assertIn("https://dichiarazionipubbliche.it/", html)
-        self.assertIn("prefers-reduced-motion", css)
-        self.assertIn("color-scheme:dark", css)
-        self.assertIn('name="theme-color" content="#0b0d0e"', html)
-        self.assertNotIn("L'officina di Domenico", html)
-        self.assertNotIn("PROTOTIPO NON PUBBLICO", html)
-        self.assertNotIn("mailto:", html)
         self.assertIn('src="/ritratto-instagram.jpg"', html)
         self.assertIn('alt="Ritratto pubblicato sul profilo Instagram di Domenico Massafra"', html)
+        self.assertIn('name="theme-color" content="#0b0b0d"', html)
+        self.assertIn("prefers-reduced-motion", css)
+        self.assertIn("color-scheme:dark", css)
+        self.assertNotIn("PROTOTIPO NON PUBBLICO", html)
+        self.assertNotIn("mailto:", html)
+
         photo = (site / "ritratto-instagram.jpg").read_bytes()
         self.assertGreater(len(photo), 1000)
         self.assertTrue(photo.startswith(b"\xff\xd8"))
         for mark in ("strumentini-mark.svg", "dichiarazioni-mark.svg"):
             self.assertIn(f'src="/{mark}"', html)
             self.assertIn("<svg", (site / mark).read_text())
+
+        # Social previews use the local share image.
+        self.assertRegex(html, r'<meta property="og:image" content="https://domenicomassafra\.it/share\.png">')
+        self.assertTrue((site / "share.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n"))
+
+    def test_page_makes_no_remote_font_or_third_party_request(self):
+        site = artifact_directory()
+        html = (site / "index.html").read_text()
+        css = (site / "styles.css").read_text()
+        for source in (html, css):
+            self.assertNotIn("fonts.googleapis", source)
+            self.assertNotIn("fonts.gstatic", source)
+            self.assertNotRegex(source, r"url\(\s*[\"']?https?:")
+        self.assertNotRegex(html, r'\bsrc="(https?:)?//')
+        for tag in re.findall(r"<link\b[^>]*>", html):
+            if 'rel="canonical"' not in tag:
+                self.assertNotRegex(tag, r'href="(https?:)?//')
+
+        # Every local reference resolves to a published file.
+        references = [m.strip("\"'") for m in re.findall(r"url\(([^)]+)\)", css)]
+        references += re.findall(r'(?:src|href)="(/[^"#?]*)"', html)
+        self.assertTrue(references)
+        for reference in references:
+            with self.subTest(reference=reference):
+                target = site / (reference.lstrip("/") or "index.html")
+                self.assertTrue(target.is_file(), f"{reference} is not in site/")
+
+        for font in ("archivo.woff2", "jetbrains-mono.woff2"):
+            self.assertTrue((site / "fonts" / font).read_bytes().startswith(b"wOF2"))
+        self.assertIn("SIL OPEN FONT LICENSE", (site / "fonts/OFL.txt").read_text().upper())
 
     def test_contact_is_the_first_action_without_unverified_routes(self):
         html = (artifact_directory() / "index.html").read_text()
@@ -114,54 +168,66 @@ class PagesArtifactTest(unittest.TestCase):
         nav = html.split('<nav class="main-nav"', 1)[1].split("</nav>", 1)[0]
         nav_links = re.findall(r"<a\b[^>]*>", nav)
         self.assertGreaterEqual(len(nav_links), 2)
-        self.assertIn('href="#contatti"', nav_links[0])
+        self.assertIn('href="#contatti"', nav_links[-1])
 
         actions = html.split('<div class="hero-actions">', 1)[1].split("</div>", 1)[0]
         action_links = re.findall(r"<a\b[^>]*>", actions)
         self.assertEqual(len(action_links), 2)
-        self.assertIn('class="button button-primary"', action_links[0])
+        self.assertIn("button-primary", action_links[0])
         self.assertIn(f'href="{INSTAGRAM_PROFILE}"', action_links[0])
         self.assertIn('href="#esperimenti"', action_links[1])
-        self.assertIn("Raccontami il tuo problema", actions)
         self.assertIn("se disponibile", html.lower())
 
         footer = html.split('<footer class="footer">', 1)[1].split("</footer>", 1)[0]
         self.assertIn(f'href="{INSTAGRAM_PROFILE}"', footer)
         self.assertIn('class="footer-contact"', footer)
 
-        # Narrow layouts must keep the contact action visible and usable.
-        self.assertNotIn(".main-nav a:first-child{display:none}", css)
-        self.assertIn("@media(max-width:350px)", css)
         self.assertNotIn("mailto:", html)
         self.assertNotIn("instagram.com/direct/", html)
         self.assertNotIn("ig.me/", html)
         self.assertNotRegex(html, r"<form\b")
 
-    def test_dark_theme_keeps_wcag_aa_contrast(self):
-        site = artifact_directory()
-        tokens = root_tokens((site / "styles.css").read_text())
+        # Narrow layouts must keep the contact action visible and usable.
+        self.assertIn("@media(max-width:350px)", css)
+        for selectors, body in re.findall(r"([^{}]+)\{([^{}]*)\}", css):
+            if not re.search(r"display:none|visibility:hidden", body):
+                continue
+            for selector in selectors.split(","):
+                selector = re.sub(r":not\([^)]*\)", "", selector)
+                with self.subTest(hidden=selector.strip()):
+                    self.assertNotIn("nav-contact", selector)
+                    self.assertNotIn("footer-contact", selector)
+                    self.assertNotIn(":first-child", selector.replace("::", ""))
+
+    def test_brand_tokens_equal_the_owner_canon(self):
+        tokens = root_tokens((artifact_directory() / "styles.css").read_text())
+        for name, value in CANON_TOKENS.items():
+            with self.subTest(token=name):
+                self.assertEqual(tokens.get(name), value)
+
+    def test_brand_tokens_keep_wcag_aa_contrast(self):
+        tokens = root_tokens((artifact_directory() / "styles.css").read_text())
         # Body text 4.5:1, large text 3:1; borders are decoration and are not asserted.
         for foreground, background, minimum in (
-            ("--ink", "--paper", 4.5),
-            ("--ink-soft", "--paper", 4.5),
-            ("--ink-soft", "--sheet", 4.5),
-            ("--ink-soft", "--surface", 4.5),
-            ("--signal", "--paper", 4.5),
-            ("--signal", "--sheet", 4.5),
-            ("--signal", "--surface", 4.5),
-            ("--ink", "--footer", 4.5),
-            ("--ink-on-light", "--cream", 4.5),
-            ("--signal-on-light", "--cream", 4.5),
-            ("--cream", "--ember", 4.5),
-            ("--ink-on-light", "--ink", 4.5),
+            ("--white", "--carbon", 4.5),
+            ("--ash", "--carbon", 4.5),
+            ("--ash", "--panel", 4.5),
+            ("--signal-bright", "--carbon", 4.5),
+            ("--signal-bright", "--panel", 4.5),
+            ("--carbon", "--paper", 4.5),
+            ("--graphite", "--paper", 4.5),
+            ("--graphite", "--white", 4.5),
+            ("--carbon", "--signal-bright", 4.5),
+            ("--white", "--signal", 4.5),
+            ("--signal", "--paper", 3.0),  # large text only
         ):
             with self.subTest(foreground=foreground, background=background):
                 ratio = contrast_ratio(tokens[foreground], tokens[background])
                 self.assertGreaterEqual(round(ratio, 2), minimum)
 
-        # The page ground must stay a real dark theme, not a light one.
-        self.assertLess(relative_luminance(tokens["--paper"]), 0.02)
-        self.assertGreater(relative_luminance(tokens["--ink"]), 0.7)
+        # The page ground must stay a real dark theme, with white text on it.
+        self.assertLess(relative_luminance(tokens["--carbon"]), 0.02)
+        self.assertGreater(relative_luminance(tokens["--white"]), 0.7)
 
     def test_public_routes_and_private_repository_paths(self):
         site = artifact_directory()
@@ -171,7 +237,19 @@ class PagesArtifactTest(unittest.TestCase):
             thread.start()
             try:
                 base = f"http://127.0.0.1:{server.server_port}"
-                for path in ("/", "/styles.css", "/favicon.svg", "/ritratto-instagram.jpg", "/strumentini-mark.svg", "/dichiarazioni-mark.svg", "/robots.txt", "/sitemap.xml"):
+                for path in (
+                    "/",
+                    "/styles.css",
+                    "/favicon.svg",
+                    "/ritratto-instagram.jpg",
+                    "/strumentini-mark.svg",
+                    "/dichiarazioni-mark.svg",
+                    "/share.png",
+                    "/fonts/archivo.woff2",
+                    "/fonts/jetbrains-mono.woff2",
+                    "/robots.txt",
+                    "/sitemap.xml",
+                ):
                     with self.subTest(path=path), urlopen(base + path) as response:
                         self.assertEqual(response.status, 200)
                         self.assertTrue(response.read())

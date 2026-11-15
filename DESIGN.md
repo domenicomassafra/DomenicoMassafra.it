@@ -1,61 +1,68 @@
-# Direzione visiva del sito — proposta eseguibile, 7 novembre 2026, tema scuro 8 novembre 2026
+# Sistema visivo del sito — 15 novembre 2026
 
-Stato: candidata implementata sul branch #9, convertita a tema scuro l'8 novembre. La preferenza estetica definitiva dell'owner deve ancora essere verificata.
+Stato: redesign completo della issue #18, sul canone di marca applicato alla lettera.
 
-## Perché il nuovo impianto
+## Perché
 
-Il 2 novembre l'owner ha valutato la precedente homepage «pessima». La nuova versione segue il mandato successivo del 7 novembre di completare i siti. Si presenta come una pagina editoriale personale: Domenico è visibile in una fotografia autentica, il messaggio iniziale è verificabile e la prima azione invita a raccontare un problema concreto attraverso il contatto già funzionante.
+L'owner ha bocciato due direzioni: la homepage del 2 novembre («pessima») e «Officina cinetica» il 14 novembre, per un arancione fuori palette e un aspetto peggiore. Il 15 novembre ha chiesto un redesign completo. Decisione: nessuna interpretazione creativa dei colori o dei caratteri. Il sito usa esattamente la palette, la tipografia, le label e le frasi approvate del canone di marca (`~/Obsidian/04-areas/divulgazione/brand/BRAND.md`, `EXECUTION-SYSTEM.md`, `positioning-v2.md`); un test blocca ogni valore diverso.
 
-## Identità e composizione
+## Colori
 
-- **Modo:** Persuade, con voce da sperimentatore e spiegatore. Nessun immaginario di agenzia, cliente inventato o cruscotto finto.
-- **Mondo:** foglio di appunti e album delle prove su fondo scuro. Sfondo Notte #0b0d0e, inchiostro #f2ede2; l'accento Signal è #ff725f sulle superfici scure e torna #a72f21 sulle superfici chiare invertite. I bordi separano sezioni e materiali; l'immagine reale occupa il foglio, affiancata da una nota.
-- **Composizione:** titolo e azione immediati; ritratto autentico e nota a destra, poi due progetti pubblici, un piccolo verdetto apribile, spiegazione personale e contatto finale. A 800 px le colonne diventano sequenza verticale.
-- **Tipografia:** sans leggibile per interfaccia e messaggio principale, serif soltanto per note e contrappunti. Nessun font remoto che rallenti o tracci il visitatore.
-- **Interazione:** navigazione per ancore, HTML details nativo per il verdetto, focus ben visibile, hover leggero; nessun JavaScript di prodotto né audio automatico. La preferenza prefers-reduced-motion elimina il movimento evitabile.
-- **Stati e canali:** l'unica CTA di contatto verificata apre il profilo Instagram; la disponibilità del pulsante «Messaggio» dipende dal profilo e dall'accesso del visitatore. Link progetto e codice sono secondari.
-
-## Alternative valutate
-
-1. **Lettera aperta** — pagina molto editoriale, fotografia protagonista, parole calde e gerarchia narrativa. Rischio: senza foto originale grande il cuore visivo perde forza; i progetti diventano troppo discreti.
-2. **Album delle prove** — **implementazione candidata**. Ritratto vero in formato contenuto, voce personale, esperimenti raggiungibili, una microesperienza verificabile e percorso diretto al contatto. Rischio: avatar corrente da 150 px; sostituirlo con una foto originale prima di considerare definitiva l'identità.
-3. **Rapporto di campo** — schede di verifica, note, limiti e confronti più espliciti. Rischio: per un pubblico non tecnico può sembrare un software o un registro tecnico anziché la homepage di una persona.
-
-Il prototipo del 30 ottobre in docs/prototypes/issue-9-creative-directions.html rimane evidenza storica delle alternative precedenti; le scelte estetiche di quel round sono state superate dalla valutazione del 2 novembre.
-
-## Tema scuro — 8 novembre 2026
-
-L'owner ha chiesto l'inversione della homepage il 8 novembre 12:05: fondo nero, testo chiaro, stesso impianto e stessi contenuti. È una **refinement**, non un nuovo mondo: struttura, copy, fotografia e azioni restano identici, cambia la luce.
-
-Token in `site/styles.css` (`:root`, `color-scheme:dark`):
+Token in `:root` di `site/styles.css`, con `color-scheme:dark`.
 
 | Token | Valore | Uso |
 |---|---|---|
-| `--paper` | `#0b0d0e` | fondo pagina |
-| `--ink` | `#f2ede2` | testo principale |
-| `--ink-soft` | `#a8a299` | testi secondari |
-| `--signal` | `#ff725f` | accento su fondo scuro (stesso corallo del favicon) |
-| `--signal-on-light` | `#a72f21` | accento sulle superfici chiare invertite |
-| `--sheet` / `--surface` / `--card` | `#14171a` / `#12161a` / `#191d20` | pannelli sollevati |
-| `--cream` / `--cream-dim` | `#f7f2e7` / `#e7e2d4` | superfici chiare invertite |
-| `--ember` | `#3a120c` | fascia contatti |
-| `--footer` | `#06080a` | piè di pagina |
-| `--hair` / `--hair-strong` | `#2b2f31` / `#3d4345` | filetti e bordi |
+| `--carbon` | `#0b0b0d` | fondo pagina; testo su Paper, su White e sul pulsante Signal Bright |
+| `--panel` | `#151517` | pannelli sollevati: quadro «Come lavoro», fascia dei verdetti |
+| `--line` | `#2c2c30` | filetti e bordi su scuro (decorazione) |
+| `--paper` | `#f5f0e8` | fasce chiare: frase di fondo e progetti; pulsante del menu |
+| `--paper-line` | `#d9d2c5` | bordi delle schede su chiaro (decorazione) |
+| `--white` | `#ffffff` | testo su scuro e su Signal; fondo delle schede progetto |
+| `--signal` | `#d63f28` | campiture (fascia contatti, chip «No»), testo grande su chiaro |
+| `--signal-bright` | `#ff5a3c` | accento su scuro: parole chiave, label `// `, pulsante principale, focus |
+| `--ash` | `#9a948b` | testo secondario su scuro |
+| `--graphite` | `#66615b` | testo secondario su chiaro |
 
-Inversione per superficie: la pagina passa da carta a nero; la fascia statement da scura a crema con inchiostro scuro; la fascia metodo da chiara a pannello scuro; il riquadro "DM" da scuro a crema; la fascia contatti da rosso pieno a bragia profonda con crema. La fotografia mantiene la cornice chiara e un'ombra più profonda, così resta un oggetto fisico appoggiato al foglio.
+Regole del canone: Signal non va mai come testo normale su scuro (4,31:1), si usa Signal Bright; un solo rosso per inquadratura.
 
-Correzioni visive incluse nel passaggio: spaziatura ridotta tra le sezioni (padding 78–120 px invece di 85–140 px) e coda più stretta dopo la lista progetti; tracking dei titoli riportato entro −0,035em (era −0,042em) e monogramma "DM" a −0,02em (era −0,105em, lettere compresse); note di contatto a 13 px; testi secondari e filetti con contrasto reale sul fondo scuro; selezione del testo, caret e scrollbar temati dalla palette; intestazioni del foglio ritagliate sotto i 350 px per non spezzare le etichette.
+## Tipografia
 
-## Anteprime renderizzate
+- Archivo variabile 400–800 (`site/fonts/archivo.woff2`): titoli 700 con tracking −0,03em, testo 500–600.
+- JetBrains Mono 700 (`site/fonts/jetbrains-mono.woff2`): solo label maiuscole che iniziano con `// ` e il `//` del wordmark.
+- Font serviti dal sito stesso, licenza SIL OFL in `site/fonts/OFL.txt`; nessuna richiesta a Google Fonts o a terzi. Fallback: Arial/Helvetica e ui-monospace/Menlo.
 
-Prima (main precedente): [desktop](docs/prototypes/issue-9-light-desktop.png) e [mobile 390 px](docs/prototypes/issue-9-light-mobile.png). Dopo: [desktop](docs/prototypes/issue-9-dark-desktop.png) e [mobile 390 px](docs/prototypes/issue-9-dark-mobile.png). Le catture sono generate da Chromium headless via CDP con pagina intera, servendo la directory pubblica `site/` in HTTP, con `--force-device-scale-factor=1` e viewport 1440×900 / 390×844.
+## Struttura della pagina
 
-## Fonti e limiti
+1. **Intestazione** fissa e traslucida: wordmark «Domenico Massafra//», ancore Verdetti, Progetti, Chi sono e il pulsante chiaro «Scrivimi» verso `#contatti` (primo link nel codice, mostrato a destra).
+2. **Apertura**: label `// AI per chi lavora, anche senza codice`, promessa approvata «Faccio lavorare gli agenti AI su problemi veri. Ti mostro cosa funziona, anche se non programmi.», due azioni (profilo Instagram, poi `#esperimenti`) e nota «se disponibile» sul pulsante «Messaggio». A destra il quadro «Come lavoro»: ritratto, quattro passaggi (richiesta, agenti, controllo, verdetto) e i chip Sì / Dipende / No.
+3. **Frase di fondo** su Paper: «Non devi saper programmare. Devi capirne abbastanza.»
+4. **Metodo**: tre domande (cosa conta, come funziona, cosa farne) in tre colonne.
+5. **Vale il tuo tempo?** (`#verdetti`, su pannello): quattro domande con verdetto e limite.
+6. **Progetti** (`#esperimenti`, su Paper): schede Strumentini.it e DichiarazioniPubbliche.it con i loro marchi reali, link a GitHub.
+7. **Chi sono** (`#chi-sono`): presentazione personale e link ai video su Instagram.
+8. **Contatto** (`#contatti`, campitura Signal): invito a raccontare un compito ripetitivo, pulsante verso il profilo Instagram.
+9. **Piè di pagina**: wordmark, Instagram (`footer-contact`), GitHub, torna su.
 
-Fonti: decisioni owner in [issue #9](https://github.com/domenicomassafra/DomenicoMassafra.it/issues/9), e canone Obsidian 04-areas/divulgazione/brand/positioning-v2.md, BRAND.md, EXECUTION-SYSTEM.md. L'immagine site/ritratto-instagram.jpg deriva il 7 novembre dalla proprietà og:image del profilo pubblico https://www.instagram.com/domenico.massafraa/, verificato da title/description; risoluzione ricevuta 150×150, uso in piccolo formato e nessuna generazione sintetica. Nessun contenuto del vault è copiato come nuova fonte canonica.
+Sotto 900 px le colonne diventano una sequenza; sotto 640 px il menu mostra solo «Scrivimi» e i pulsanti occupano tutta la larghezza; sotto 350 px wordmark e pulsante si stringono, senza nascondere il contatto.
 
-I marchi site/strumentini-mark.svg e site/dichiarazioni-mark.svg sono copie esatte dei rispettivi favicon.svg pubblici dei due prodotti di Domenico, scaricati il 7 novembre; entrambe le immagini sono usate come elementi decorativi accanto ai link editoriali, senza creare nuovi simboli fittizi.
+## Interazione e movimento
 
-## Verifiche
+- Entrata dell'apertura: gli elementi salgono di 18 px in dissolvenza, a scaglioni di circa 60 ms; il quadro «Come lavoro» sale insieme con 0,2 s di ritardo.
+- Quadro «Come lavoro»: i quattro passaggi si accendono a turno, un ciclo ogni 10 s (2,5 s ciascuno); il ciclo si ferma con il puntatore sopra il quadro.
+- Verdetti: `<details name="verdetto">` nativi ed esclusivi, aprirne uno chiude l'altro, il primo è aperto al caricamento; il «+» ruota in «×», nessun JavaScript.
+- Schede progetto: al passaggio salgono di 4 px con ombra e sottolineatura Signal crescente; i pulsanti salgono di 2 px.
+- Focus visibile con contorno Signal Bright (bianco sulla fascia contatti).
+- Con `prefers-reduced-motion: reduce` animazioni, transizioni e scorrimento morbido sono spenti e i quattro passaggi restano tutti accesi.
 
-Suite Python sul sito statico esatto pubblicato da GitHub Pages, link interni risolti, HTML/CSS esposti via HTTP, immagine disponibile, fallback del verdetto, supporto a reduced motion. Il test `test_dark_theme_keeps_wcag_aa_contrast` calcola i rapporti di contrasto WCAG dai token di `:root` e impone 4,5:1 su testo normale (inclusi i secondari su fondo e pannelli), verifica che il fondo resti sotto 0,02 di luminanza relativa e che l'inchiostro superi 0,7. Verifica visuale headless e assenza di overflow orizzontale a 320/360/390/414/540/600/768/1024/1440 px. Per il DONE del ticket resta il giudizio owner sulla direzione scura e, se non è soddisfacente, la foto originale scelta.
+## Immagine di condivisione
+
+`site/share.png`, 1200×630 px, referenziata da `og:image`: fondo Carbon, label mono Signal Bright, promessa in Archivo bianca con «problemi veri.» in Signal Bright, wordmark e dominio in basso. Nessuna foto.
+
+## Verificato dai test
+
+`tests/test_pages_artifact.py`, eseguito dalla CI prima del deploy: file pubblicati esatti; promessa e payoff presenti; sezioni e ancore; quattro verdetti con uno solo aperto; link Instagram e progetti; ritratto con testo alternativo; nessuna email né form; nessun font remoto o richiesta di terzi; ogni riferimento locale esiste; font WOFF2 e PNG validi; token uguali al canone; contrasti WCAG (4,5:1 per il testo, 3:1 per Signal su Paper solo testo grande); rotte servite in HTTP e file del repository non pubblicati.
+
+## Limiti noti
+
+- Il ritratto è la foto profilo Instagram da 150×150 px (recuperata il 7 novembre dall'`og:image` del profilo pubblico), mostrata a 76 px. Con l'originale ad alta risoluzione si potrebbe usare un ritratto più grande.
+- I contrasti sono verificati sui token, non su ogni coppia usata nel CSS.
