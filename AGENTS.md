@@ -1,3 +1,11 @@
+## Mappa
+
+- `site/` — il sito statico servito (HTML, CSS, JS, immagini, sitemap); ci scrive chi cambia il sito.
+- `scripts/domain-status.sh` — il controllo dello stato del dominio.
+- `tests/` — le prove delle pagine e dello script del sito; ci scrive chi cambia `site/`.
+- `docs/` — `domain-cutover.md` e la storia del dominio.
+- `DESIGN.md` e `PRODUCT.md` — design e prodotto.
+
 ## Agent skills
 
 ### Issue tracker
